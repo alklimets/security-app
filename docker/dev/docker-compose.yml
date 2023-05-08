@@ -27,8 +27,6 @@ services:
       spring.datasource.username: 'admin'
       spring.datasource.password: 'admin'
       spring.profiles.active: 'swagger-enabled'
-      jwt.access.token.header: 'Auth'
-      jwt.refresh.token.header: 'AuthRef'
       jwt.access.token.secret: 'access'
       jwt.refresh.token.secret: 'refresh'
       jwt.access.token.ttl: '2'
