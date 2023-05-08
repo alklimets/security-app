@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:11
+    environment:
+      - "POSTGRES_USER=admin"
+      - "POSTGRES_PASSWORD=admin"
+    volumes:
+      - "vol_postgres:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+    networks:
+      - music_app_net
+
+  security_app:
+    image: security_app
+    container_name: security_app
+    hostname: security_app
+    build:
+      context: ../../application
+      dockerfile: Dockerfile
+    environment:
+      spring.datasource.url: 'jdbc:postgresql://postgres:5432/admin'
+      spring.datasource.username: 'admin'
+      spring.datasource.password: 'admin'
+      spring.profiles.active: 'swagger-enabled'
+    ports:
+      - "8081:8081"
+    networks:
+      - music_app_net
+
+volumes:
+  vol_postgres:
+
+networks:
+  music_app_net:
+    driver: bridge
