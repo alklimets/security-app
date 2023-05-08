@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
@@ -16,5 +15,5 @@ public class AuthorizedUserResponsePayload {
 
     private String id;
     private String username;
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<String> authorities;
 }

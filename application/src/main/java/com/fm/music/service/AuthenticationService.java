@@ -18,6 +18,7 @@ import com.fm.music.security.jwt.JwtValidator;
 import com.fm.music.util.jwt.JwtUtil;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,7 +111,7 @@ public class AuthenticationService {
             AuthorizedUserResponsePayload response = new AuthorizedUserResponsePayload();
             response.setId(user.getId());
             response.setUsername(user.getUsername());
-            response.setAuthorities(user.getAuthorities());
+            response.setAuthorities(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
             return of(response);
         } catch (JwtException e) {
             throw new CustomUnauthorizedException("Err unauth", "UNAUTHORIZED");
