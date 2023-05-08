@@ -1,0 +1,101 @@
+package com.fm.music.service;
+
+
+import com.fm.music.exception.custom.CustomBadRequestException;
+import com.fm.music.exception.custom.CustomUnauthorizedException;
+import com.fm.music.model.User;
+import com.fm.music.model.UserDetails;
+import com.fm.music.model.constants.Roles;
+import com.fm.music.model.request.JwtTokenPairRequestDTO;
+import com.fm.music.model.request.UserRegistrationRequest;
+import com.fm.music.model.request.UserRequestDTO;
+import com.fm.music.model.response.ResponsePayload;
+import com.fm.music.security.PasswordEncoder;
+import com.fm.music.security.jwt.JwtUser;
+import com.fm.music.security.jwt.JwtValidator;
+import com.fm.music.util.jwt.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import static com.fm.music.model.response.ResponsePayload.of;
+
+
+@Component
+public class AuthenticationService {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private JwtValidator jwtValidator;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Transactional
+    public ResponsePayload<Map<String, String>> authenticate(UserRequestDTO user) {
+        User existUser = userService.loadUserByUsername(user.getUsername());
+        if (existUser != null && isPasswordEquals(user, existUser) && existUser.getUsername().equals(user.getUsername())) {
+            return of(setToken(existUser));
+        }
+        throw new CustomUnauthorizedException("Err unauth", "Incorrect login or password");
+    }
+
+    private boolean isPasswordEquals(UserRequestDTO user, User existingUser) {
+        String password = passwordEncoder.encode(user.getPassword());
+        String password1 = existingUser.getPassword();
+        return password.equals(password1);
+    }
+
+    private HashMap<String, String> setToken(User user) {
+        HashMap<String, String> token = new HashMap<>();
+        String access = jwtUtil.generateAccessToken(user.getUsername());
+        token.put("Token", access);
+        String refresh = jwtUtil.generateRefreshToken(user.getUsername());
+        token.put("Refresh", refresh);
+        user.setRefreshToken(refresh);
+        return token;
+    }
+
+    public ResponsePayload<Map<String, String>> refreshTokensPair(JwtTokenPairRequestDTO tokens) {
+        JwtUser accessUser = jwtValidator.validateAccess(tokens.getAccessToken());
+        JwtUser refreshUser = jwtValidator.validateRefresh(tokens.getRefreshToken());
+
+        if (accessUser != null && refreshUser != null) {
+            User existUser = userService.loadUserByUsername(accessUser.getUsername());
+            return of(setToken(existUser));
+        }
+        throw new CustomUnauthorizedException("Err tkn", "Tokens are not valid");
+    }
+
+    @Transactional
+    public ResponsePayload<Map<String, String>> register(UserRegistrationRequest request) {
+        User existUser = userService.loadUserByUsername(request.getUsername());
+        if (existUser != null) {
+            throw new CustomBadRequestException("Err exists", "User with current username exists");
+        }
+        User user = new User();
+        user.setId(UUID.randomUUID().toString());
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(Roles.USER);
+
+        UserDetails details = UserDetails.from(request.getDetails());
+        details.setId(UUID.randomUUID().toString());
+        details.setUserId(user.getId());
+
+        Map<String, String> tokenPairs = setToken(user);
+        userService.saveUser(user);
+        userService.saveUserDetails(details);
+
+        return of(tokenPairs);
+    }
+}
