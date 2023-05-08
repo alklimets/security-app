@@ -1,4 +1,4 @@
-package com.fm.music.model.dto;
+package com.fm.music.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,8 +12,9 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorizedUserResponseDTO {
+public class AuthorizedUserResponsePayload {
 
+    private String id;
     private String username;
     private Collection<? extends GrantedAuthority> authorities;
 }

@@ -39,4 +39,21 @@ public class SwaggerConfig {
                         typeResolver.resolve(ValidationPayload.class));
     }
 
+
+
+    @Bean
+    public Docket profileApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .securitySchemes(authConfig.getApiKeys())
+                .securityContexts(authConfig.getSecurityContext())
+                .groupName("User Details API")
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.ant("/api/v1/common/details/**"))
+                .build()
+                .additionalModels(typeResolver.resolve(ErrorResponsePayload.class),
+                        typeResolver.resolve(ResponsePayload.class),
+                        typeResolver.resolve(ValidationPayload.class));
+    }
+
 }

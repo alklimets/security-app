@@ -6,11 +6,11 @@ import com.fm.music.exception.custom.CustomUnauthorizedException;
 import com.fm.music.model.User;
 import com.fm.music.model.UserDetails;
 import com.fm.music.model.constants.Roles;
-import com.fm.music.model.dto.AuthorizedUserResponseDTO;
 import com.fm.music.model.request.JwtTokenPairRequestDTO;
 import com.fm.music.model.request.UserAuthorizationRequest;
 import com.fm.music.model.request.UserRegistrationRequest;
 import com.fm.music.model.request.UserRequestDTO;
+import com.fm.music.model.response.AuthorizedUserResponsePayload;
 import com.fm.music.model.response.ResponsePayload;
 import com.fm.music.security.PasswordEncoder;
 import com.fm.music.security.jwt.JwtUser;
@@ -102,12 +102,13 @@ public class AuthenticationService {
         return of(tokenPairs);
     }
 
-    public ResponsePayload<AuthorizedUserResponseDTO> authorize(UserAuthorizationRequest authorizationRequest) {
+    public ResponsePayload<AuthorizedUserResponsePayload> authorize(UserAuthorizationRequest authorizationRequest) {
         String accessToken = authorizationRequest.getAccessToken();
         try{
             JwtUser jwtUser = jwtValidator.validateAccess(accessToken);
             User user = userService.loadUserByUsername(jwtUser.getUsername());
-            AuthorizedUserResponseDTO response = new AuthorizedUserResponseDTO();
+            AuthorizedUserResponsePayload response = new AuthorizedUserResponsePayload();
+            response.setId(user.getId());
             response.setUsername(user.getUsername());
             response.setAuthorities(user.getAuthorities());
             return of(response);
