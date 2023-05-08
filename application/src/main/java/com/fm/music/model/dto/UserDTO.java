@@ -14,10 +14,4 @@ public class UserDTO {
     private String id;
     private String username;
     private String role;
-
-    public static UserDTO fromEntity(User user) {
-        return new UserDTO(user.getId(),
-                user.getUsername(),
-                user.getRole().name());
-    }
 }

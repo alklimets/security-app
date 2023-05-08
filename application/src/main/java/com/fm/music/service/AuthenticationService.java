@@ -6,7 +6,9 @@ import com.fm.music.exception.custom.CustomUnauthorizedException;
 import com.fm.music.model.User;
 import com.fm.music.model.UserDetails;
 import com.fm.music.model.constants.Roles;
+import com.fm.music.model.dto.AuthorizedUserResponseDTO;
 import com.fm.music.model.request.JwtTokenPairRequestDTO;
+import com.fm.music.model.request.UserAuthorizationRequest;
 import com.fm.music.model.request.UserRegistrationRequest;
 import com.fm.music.model.request.UserRequestDTO;
 import com.fm.music.model.response.ResponsePayload;
@@ -14,6 +16,7 @@ import com.fm.music.security.PasswordEncoder;
 import com.fm.music.security.jwt.JwtUser;
 import com.fm.music.security.jwt.JwtValidator;
 import com.fm.music.util.jwt.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,5 +100,19 @@ public class AuthenticationService {
         userService.saveUserDetails(details);
 
         return of(tokenPairs);
+    }
+
+    public ResponsePayload<AuthorizedUserResponseDTO> authorize(UserAuthorizationRequest authorizationRequest) {
+        String accessToken = authorizationRequest.getAccessToken();
+        try{
+            JwtUser jwtUser = jwtValidator.validateAccess(accessToken);
+            User user = userService.loadUserByUsername(jwtUser.getUsername());
+            AuthorizedUserResponseDTO response = new AuthorizedUserResponseDTO();
+            response.setUsername(user.getUsername());
+            response.setAuthorities(user.getAuthorities());
+            return of(response);
+        } catch (JwtException e) {
+            throw new CustomUnauthorizedException("Err unauth", "UNAUTHORIZED");
+        }
     }
 }

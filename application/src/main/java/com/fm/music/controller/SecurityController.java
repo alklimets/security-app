@@ -2,6 +2,7 @@ package com.fm.music.controller;
 
 import com.fm.music.model.annotation.DefaultSwaggerEndpoint;
 import com.fm.music.model.request.JwtTokenPairRequestDTO;
+import com.fm.music.model.request.UserAuthorizationRequest;
 import com.fm.music.model.request.UserRegistrationRequest;
 import com.fm.music.model.request.UserRequestDTO;
 import com.fm.music.model.response.ResponsePayload;
@@ -11,10 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -32,6 +30,13 @@ public class SecurityController {
     @PostMapping("/authenticate")
     public ResponseEntity<ResponsePayload> authenticate(@Valid @RequestBody UserRequestDTO user) {
         return ResponseEntity.ok(authenticationService.authenticate(user));
+    }
+
+    @DefaultSwaggerEndpoint
+    @ApiOperation(value = "Authorize", produces = "application/json")
+    @PostMapping("/authorize")
+    public ResponseEntity<ResponsePayload> authorize(@Valid @RequestBody UserAuthorizationRequest authorizationRequest) {
+        return ResponseEntity.ok(authenticationService.authorize(authorizationRequest));
     }
 
     @DefaultSwaggerEndpoint
