@@ -16,6 +16,7 @@ public class BasicAuthEntrypoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json");
+        response.setStatus(401);
         response.getOutputStream().print("{\"errorCode\":\"401\",\"message\":\"UNAUTHORIZED\"}");
     }
 

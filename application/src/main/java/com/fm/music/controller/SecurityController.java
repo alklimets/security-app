@@ -1,12 +1,10 @@
 package com.fm.music.controller;
 
 import com.fm.music.model.annotation.DefaultSwaggerEndpoint;
-import com.fm.music.model.request.JwtTokenPairRequestDTO;
-import com.fm.music.model.request.UserAuthorizationRequest;
-import com.fm.music.model.request.UserRegistrationRequest;
-import com.fm.music.model.request.UserRequestDTO;
+import com.fm.music.model.request.*;
 import com.fm.music.model.response.dto.AuthenticationTokensDTO;
 import com.fm.music.model.response.dto.AuthorizedUserResponseDTO;
+import com.fm.music.model.response.dto.BasicAuthorizedUserResponseDTO;
 import com.fm.music.model.response.wrapper.ResponsePayload;
 import com.fm.music.service.AuthenticationService;
 import io.swagger.annotations.Api;
@@ -42,6 +40,13 @@ public class SecurityController {
     @PostMapping("/authorize")
     public ResponseEntity<ResponsePayload<AuthorizedUserResponseDTO>> authorize(@Valid @RequestBody UserAuthorizationRequest authorizationRequest) {
         return ResponseEntity.ok(authenticationService.authorize(authorizationRequest));
+    }
+
+    @DefaultSwaggerEndpoint
+    @ApiOperation(value = "Authorize basic", produces = "application/json")
+    @PostMapping("/authorize-basic")
+    public ResponseEntity<ResponsePayload<BasicAuthorizedUserResponseDTO>> authorizeBasic(@Valid @RequestBody UserBasicAuthorizationRequest authorizationRequest) {
+        return ResponseEntity.ok(authenticationService.authorizeBasic(authorizationRequest));
     }
 
     @DefaultSwaggerEndpoint

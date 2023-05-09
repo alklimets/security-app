@@ -6,12 +6,10 @@ import com.fm.music.exception.custom.CustomUnauthorizedException;
 import com.fm.music.model.User;
 import com.fm.music.model.UserDetails;
 import com.fm.music.model.constants.Roles;
-import com.fm.music.model.request.JwtTokenPairRequestDTO;
-import com.fm.music.model.request.UserAuthorizationRequest;
-import com.fm.music.model.request.UserRegistrationRequest;
-import com.fm.music.model.request.UserRequestDTO;
+import com.fm.music.model.request.*;
 import com.fm.music.model.response.dto.AuthenticationTokensDTO;
 import com.fm.music.model.response.dto.AuthorizedUserResponseDTO;
+import com.fm.music.model.response.dto.BasicAuthorizedUserResponseDTO;
 import com.fm.music.model.response.wrapper.ResponsePayload;
 import com.fm.music.security.PasswordEncoder;
 import com.fm.music.security.jwt.JwtUser;
@@ -115,5 +113,20 @@ public class AuthenticationService {
         } catch (JwtException e) {
             throw new CustomUnauthorizedException("Err unauth", "UNAUTHORIZED");
         }
+    }
+
+    public ResponsePayload<BasicAuthorizedUserResponseDTO> authorizeBasic(UserBasicAuthorizationRequest authorizationRequest) {
+        String username = authorizationRequest.getUsername();
+        String password = authorizationRequest.getPassword();
+        User user = userService.loadUserByUsername(username);
+        if (authenticateInTheSystem(user, username, password)) {
+            return of(new BasicAuthorizedUserResponseDTO(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()));
+        } else {
+            throw new CustomUnauthorizedException("Err unauth", "UNAUTHORIZED");
+        }
+    }
+
+    private boolean authenticateInTheSystem(User user, String username, String password) {
+        return user != null && user.getUsername().equals(username) && user.getPassword().equals(passwordEncoder.encode(password));
     }
 }
