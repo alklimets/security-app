@@ -15,10 +15,10 @@ services:
     networks:
       - music_app_net
 
-  security_app:
-    image: security_app
-    container_name: security_app
-    hostname: security_app
+  security-app:
+    image: security-app
+    container_name: security-app
+    hostname: security-app
     build:
       context: ../../application
       dockerfile: Dockerfile
