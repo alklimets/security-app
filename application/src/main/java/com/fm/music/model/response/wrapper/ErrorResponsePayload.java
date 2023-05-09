@@ -1,4 +1,4 @@
-package com.fm.music.model.response;
+package com.fm.music.model.response.wrapper;
 
 import io.swagger.annotations.ApiModel;
 

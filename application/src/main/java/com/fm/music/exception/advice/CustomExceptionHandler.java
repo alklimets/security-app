@@ -1,8 +1,8 @@
 package com.fm.music.exception.advice;
 
 import com.fm.music.exception.custom.*;
-import com.fm.music.model.response.ErrorResponsePayload;
-import com.fm.music.model.response.ValidationPayload;
+import com.fm.music.model.response.wrapper.ErrorResponsePayload;
+import com.fm.music.model.response.wrapper.ValidationPayload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,7 +47,7 @@ public class CustomExceptionHandler {
                 .stream()
                 .map(ObjectError::getDefaultMessage)
                 .toList();
-        return ResponseEntity.status(400)
+        return ResponseEntity.status(422)
                 .body(new ValidationPayload("Validation failed", payload));
     }
 

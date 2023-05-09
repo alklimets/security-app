@@ -2,9 +2,9 @@ package com.fm.music.config;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.fm.music.beans.AuthConfig;
-import com.fm.music.model.response.ErrorResponsePayload;
-import com.fm.music.model.response.ResponsePayload;
-import com.fm.music.model.response.ValidationPayload;
+import com.fm.music.model.response.wrapper.ErrorResponsePayload;
+import com.fm.music.model.response.wrapper.ResponsePayload;
+import com.fm.music.model.response.wrapper.ValidationPayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

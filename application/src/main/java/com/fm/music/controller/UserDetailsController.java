@@ -1,7 +1,8 @@
 package com.fm.music.controller;
 
 import com.fm.music.model.annotation.DefaultSwaggerEndpoint;
-import com.fm.music.model.response.ResponsePayload;
+import com.fm.music.model.dto.UserDetailsDTO;
+import com.fm.music.model.response.wrapper.ResponsePayload;
 import com.fm.music.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.fm.music.model.response.ResponsePayload.of;
+import static com.fm.music.model.response.wrapper.ResponsePayload.of;
 
 @RestController
 @RequestMapping("/api/v1/common/details")
@@ -27,7 +28,7 @@ public class UserDetailsController {
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "User details", produces = "application/json")
     @PostMapping("/details/{userId}")
-    public ResponseEntity<ResponsePayload> getUserDetails(@PathVariable("userId") String userId) {
+    public ResponseEntity<ResponsePayload<UserDetailsDTO>> getUserDetails(@PathVariable("userId") String userId) {
         return ResponseEntity.ok(of(user.getUserDetails(userId)));
     }
 }

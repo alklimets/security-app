@@ -1,7 +1,7 @@
 package com.fm.music.model.annotation;
 
-import com.fm.music.model.response.ErrorResponsePayload;
-import com.fm.music.model.response.ResponsePayload;
+import com.fm.music.model.response.wrapper.ErrorResponsePayload;
+import com.fm.music.model.response.wrapper.ValidationPayload;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,8 +14,6 @@ import java.lang.annotation.Target;
 
 @ApiResponses(
         value = {
-                @ApiResponse(responseCode = "200", description = "OK",
-                        content = {@Content(schema = @Schema(implementation = ResponsePayload.class))}),
                 @ApiResponse(responseCode = "400", description = "Bad request",
                         content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))}),
                 @ApiResponse(responseCode = "401", description = "Unauthorized",
@@ -24,6 +22,8 @@ import java.lang.annotation.Target;
                         content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))}),
                 @ApiResponse(responseCode = "404", description = "Not found",
                         content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))}),
+                @ApiResponse(responseCode = "422", description = "Validation failed",
+                        content = {@Content(schema = @Schema(implementation = ValidationPayload.class))}),
                 @ApiResponse(responseCode = "500", description = "Internal server error",
                         content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))})
         }

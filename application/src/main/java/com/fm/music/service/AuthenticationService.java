@@ -10,8 +10,9 @@ import com.fm.music.model.request.JwtTokenPairRequestDTO;
 import com.fm.music.model.request.UserAuthorizationRequest;
 import com.fm.music.model.request.UserRegistrationRequest;
 import com.fm.music.model.request.UserRequestDTO;
-import com.fm.music.model.response.AuthorizedUserResponsePayload;
-import com.fm.music.model.response.ResponsePayload;
+import com.fm.music.model.response.dto.AuthenticationTokensDTO;
+import com.fm.music.model.response.dto.AuthorizedUserResponseDTO;
+import com.fm.music.model.response.wrapper.ResponsePayload;
 import com.fm.music.security.PasswordEncoder;
 import com.fm.music.security.jwt.JwtUser;
 import com.fm.music.security.jwt.JwtValidator;
@@ -22,11 +23,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-import static com.fm.music.model.response.ResponsePayload.of;
+import static com.fm.music.model.response.wrapper.ResponsePayload.of;
 
 
 @Component
@@ -45,7 +44,7 @@ public class AuthenticationService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public ResponsePayload<Map<String, String>> authenticate(UserRequestDTO user) {
+    public ResponsePayload<AuthenticationTokensDTO> authenticate(UserRequestDTO user) {
         User existUser = userService.loadUserByUsername(user.getUsername());
         if (existUser != null && isPasswordEquals(user, existUser) && existUser.getUsername().equals(user.getUsername())) {
             return of(setToken(existUser));
@@ -59,17 +58,17 @@ public class AuthenticationService {
         return password.equals(password1);
     }
 
-    private HashMap<String, String> setToken(User user) {
-        HashMap<String, String> token = new HashMap<>();
+    private AuthenticationTokensDTO setToken(User user) {
+        AuthenticationTokensDTO response = new AuthenticationTokensDTO();
         String access = jwtUtil.generateAccessToken(user.getUsername());
-        token.put("Token", access);
         String refresh = jwtUtil.generateRefreshToken(user.getUsername());
-        token.put("Refresh", refresh);
+        response.setAccessToken(access);
+        response.setRefreshToken(refresh);
         user.setRefreshToken(refresh);
-        return token;
+        return response;
     }
 
-    public ResponsePayload<Map<String, String>> refreshTokensPair(JwtTokenPairRequestDTO tokens) {
+    public ResponsePayload<AuthenticationTokensDTO> refreshTokensPair(JwtTokenPairRequestDTO tokens) {
         JwtUser accessUser = jwtValidator.validateAccess(tokens.getAccessToken());
         JwtUser refreshUser = jwtValidator.validateRefresh(tokens.getRefreshToken());
 
@@ -81,7 +80,7 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public ResponsePayload<Map<String, String>> register(UserRegistrationRequest request) {
+    public ResponsePayload<AuthenticationTokensDTO> register(UserRegistrationRequest request) {
         User existUser = userService.loadUserByUsername(request.getUsername());
         if (existUser != null) {
             throw new CustomBadRequestException("Err exists", "User with current username exists");
@@ -96,19 +95,19 @@ public class AuthenticationService {
         details.setId(UUID.randomUUID().toString());
         details.setUserId(user.getId());
 
-        Map<String, String> tokenPairs = setToken(user);
+        AuthenticationTokensDTO response = setToken(user);
         userService.saveUser(user);
         userService.saveUserDetails(details);
 
-        return of(tokenPairs);
+        return of(response);
     }
 
-    public ResponsePayload<AuthorizedUserResponsePayload> authorize(UserAuthorizationRequest authorizationRequest) {
+    public ResponsePayload<AuthorizedUserResponseDTO> authorize(UserAuthorizationRequest authorizationRequest) {
         String accessToken = authorizationRequest.getAccessToken();
         try{
             JwtUser jwtUser = jwtValidator.validateAccess(accessToken);
             User user = userService.loadUserByUsername(jwtUser.getUsername());
-            AuthorizedUserResponsePayload response = new AuthorizedUserResponsePayload();
+            AuthorizedUserResponseDTO response = new AuthorizedUserResponseDTO();
             response.setId(user.getId());
             response.setUsername(user.getUsername());
             response.setAuthorities(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
