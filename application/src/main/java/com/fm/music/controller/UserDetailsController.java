@@ -9,8 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,12 +23,12 @@ import static com.fm.music.model.response.wrapper.ResponsePayload.of;
 public class UserDetailsController {
 
     @Autowired
-    private UserService user;
+    private UserService userService;
 
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "User details", produces = "application/json")
-    @PostMapping("/details/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<ResponsePayload<UserDetailsDTO>> getUserDetails(@PathVariable("userId") String userId) {
-        return ResponseEntity.ok(of(user.getUserDetails(userId)));
+        return ResponseEntity.ok(of(userService.getUserDetails(userId)));
     }
 }
