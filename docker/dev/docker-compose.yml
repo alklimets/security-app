@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - music_app_net
+      - pet_project_net
 
   security-app:
     image: security-app
@@ -26,19 +26,17 @@ services:
       spring.datasource.url: 'jdbc:postgresql://postgres:5432/admin'
       spring.datasource.username: 'admin'
       spring.datasource.password: 'admin'
-      spring.profiles.active: 'swagger-enabled'
-      jwt.access.token.secret: 'access'
-      jwt.refresh.token.secret: 'refresh'
+      spring.profiles.active: 'swagger-enabled,no-auth'
       jwt.access.token.ttl: '2'
       jwt.refresh.token.ttl: '720'
     ports:
       - "8081:8081"
     networks:
-      - music_app_net
+      - pet_project_net
 
 volumes:
   vol_postgres:
 
 networks:
-  music_app_net:
+  pet_project_net:
     driver: bridge
