@@ -13,6 +13,13 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static com.fm.music.domain.constants.SecurityConstants.WHITE_LIST_URLS;
 
+/**
+ * Configuration enables basic security for the module
+ * In general this app does not need authentication for
+ * incoming requests, but for reference as example it is
+ * places here, could be activated by choosing basic-auth
+ * spring profile
+ */
 @Configuration
 @EnableWebSecurity
 @WithBasicAuth
