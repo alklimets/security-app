@@ -29,10 +29,10 @@ public class UserDetails {
 
     public static UserDetails from(UserDetailsRequestDTO details) {
         UserDetails userDetails = new UserDetails();
-        userDetails.setName(details.getName());
-        userDetails.setSurname(details.getSurname());
-        userDetails.setCountry(details.getCountry());
-        userDetails.setCity(details.getCity());
+        userDetails.setName(details.name());
+        userDetails.setSurname(details.surname());
+        userDetails.setCountry(details.country());
+        userDetails.setCity(details.city());
         return userDetails;
     }
 

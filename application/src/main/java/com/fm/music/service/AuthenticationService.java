@@ -43,15 +43,15 @@ public class AuthenticationService {
 
     @Transactional
     public ResponsePayload<AuthenticationTokensDTO> authenticate(UserRequestDTO user) {
-        User existUser = userService.loadUserByUsername(user.getUsername());
-        if (existUser != null && isPasswordEquals(user, existUser) && existUser.getUsername().equals(user.getUsername())) {
+        User existUser = userService.loadUserByUsername(user.username());
+        if (existUser != null && isPasswordEquals(user, existUser) && existUser.getUsername().equals(user.username())) {
             return of(setToken(existUser));
         }
         throw new CustomUnauthorizedException("Err unauth", "Incorrect login or password");
     }
 
     private boolean isPasswordEquals(UserRequestDTO user, User existingUser) {
-        String password = passwordEncoder.encode(user.getPassword());
+        String password = passwordEncoder.encode(user.password());
         String password1 = existingUser.getPassword();
         return password.equals(password1);
     }
@@ -67,8 +67,8 @@ public class AuthenticationService {
     }
 
     public ResponsePayload<AuthenticationTokensDTO> refreshTokensPair(JwtTokenPairRequestDTO tokens) {
-        JwtUser accessUser = jwtValidator.validateAccess(tokens.getAccessToken());
-        JwtUser refreshUser = jwtValidator.validateRefresh(tokens.getRefreshToken());
+        JwtUser accessUser = jwtValidator.validateAccess(tokens.accessToken());
+        JwtUser refreshUser = jwtValidator.validateRefresh(tokens.refreshToken());
 
         if (accessUser != null && refreshUser != null) {
             User existUser = userService.loadUserByUsername(accessUser.getUsername());
@@ -79,17 +79,17 @@ public class AuthenticationService {
 
     @Transactional
     public ResponsePayload<AuthenticationTokensDTO> register(UserRegistrationRequest request) {
-        User existUser = userService.loadUserByUsername(request.getUsername());
+        User existUser = userService.loadUserByUsername(request.username());
         if (existUser != null) {
             throw new CustomBadRequestException("Err exists", "User with current username exists");
         }
         User user = new User();
         user.setId(UUID.randomUUID().toString());
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setUsername(request.username());
+        user.setPassword(passwordEncoder.encode(request.password()));
         user.setRole(Roles.USER);
 
-        UserDetails details = UserDetails.from(request.getDetails());
+        UserDetails details = UserDetails.from(request.details());
         details.setId(UUID.randomUUID().toString());
         details.setUserId(user.getId());
 
@@ -101,7 +101,7 @@ public class AuthenticationService {
     }
 
     public ResponsePayload<AuthorizedUserResponseDTO> authorize(UserAuthorizationRequest authorizationRequest) {
-        String accessToken = authorizationRequest.getAccessToken();
+        String accessToken = authorizationRequest.accessToken();
         try{
             JwtUser jwtUser = jwtValidator.validateAccess(accessToken);
             User user = userService.loadUserByUsername(jwtUser.getUsername());
@@ -116,8 +116,8 @@ public class AuthenticationService {
     }
 
     public ResponsePayload<BasicAuthorizedUserResponseDTO> authorizeBasic(UserBasicAuthorizationRequest authorizationRequest) {
-        String username = authorizationRequest.getUsername();
-        String password = authorizationRequest.getPassword();
+        String username = authorizationRequest.username();
+        String password = authorizationRequest.password();
         User user = userService.loadUserByUsername(username);
         if (authenticateInTheSystem(user, username, password)) {
             return of(new BasicAuthorizedUserResponseDTO(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()));
