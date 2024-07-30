@@ -1,0 +1,10 @@
+package com.aklimets.pet.domain.model.userdetails;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> {
+
+    UserDetails findByUserId(String userId);
+
+}

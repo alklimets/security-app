@@ -14,7 +14,7 @@
 	</parent>
 
 
-	<groupId>com.fm.music</groupId>
+	<groupId>com.aklimets.pet</groupId>
 	<artifactId>security-app</artifactId>
 	<version>${revision}</version>
 	<name>security-app</name>
