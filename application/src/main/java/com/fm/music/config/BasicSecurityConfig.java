@@ -1,5 +1,6 @@
 package com.fm.music.config;
 
+import com.fm.music.model.annotation.WithBasicAuth;
 import com.fm.music.security.BasicAuthEntrypoint;
 import com.fm.music.security.BasicAuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,8 @@ import static com.fm.music.model.constants.SecurityConstants.WHITE_LIST_URLS;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+@WithBasicAuth
+public class BasicSecurityConfig {
 
     @Autowired
     private BasicAuthProvider basicAuthProvider;

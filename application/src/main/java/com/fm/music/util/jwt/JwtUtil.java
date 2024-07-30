@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -27,16 +28,20 @@ public class JwtUtil {
     @Value("${jwt.refresh.token.ttl}")
     private String refreshTokenTtl;
 
-    public  <T> T extractClaim(Claims claims, Function<Claims, T> getSubject) {
-        return getSubject.apply(claims);
+    public  <T> T extractClaim(Claims claims, Function<Claims, T> extract) {
+        return extract.apply(claims);
     }
 
     public Claims extractAccessClaims(String token) {
-        return Jwts.parser().setSigningKey(accessTokenSecret).parseClaimsJws(token).getBody();
+        return extractTokenClaims(token, accessTokenSecret);
     }
 
     public Claims extractRefreshClaims(String token) {
-        return Jwts.parser().setSigningKey(refreshTokenSecret).parseClaimsJws(token).getBody();
+        return extractTokenClaims(token, refreshTokenSecret);
+    }
+
+    private Claims extractTokenClaims(String token, String secret) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
     public String generateAccessToken(String username) {

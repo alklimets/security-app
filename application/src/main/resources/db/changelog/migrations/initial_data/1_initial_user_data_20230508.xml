@@ -11,28 +11,28 @@
     <changeSet id="20230508-users-data" author="aklimets">
         <insert tableName="users" schemaName="security">
             <column name="id" value="842aaa2e-7788-4ecb-b441-7c13rt30b8bf"/>
-            <column name="username" value="qa"/>
-            <column name="password" value="3f3ef786b34d6dd716e1812c8b74a7a0e1f05aa5f3230588f6f5bcd00c6c8392"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"/>
             <column name="role" value="ADMIN"/>
         </insert>
         <insert tableName="users" schemaName="security">
             <column name="id" value="842aaaae-7788-4ecb-b441-7c7er450b8bf"/>
-            <column name="username" value="qa1"/>
-            <column name="password" value="e5a6b85b180b9ea1dced0da0e96338daa11eb8cf4cc65c93278ae7548b8b476d"/>
+            <column name="username" value="admin1"/>
+            <column name="password" value="240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"/>
             <column name="role" value="USER"/>
         </insert>
 
         <insert tableName="user_details" schemaName="security">
             <column name="id" value="842aaaae-7788-444b-b441-7c7er45077bf"/>
             <column name="user_id" value="842aaa2e-7788-4ecb-b441-7c13rt30b8bf"/>
-            <column name="name" value="qa"/>
-            <column name="surname" value="qa"/>
+            <column name="name" value="Aliaksandr"/>
+            <column name="surname" value="Klimets"/>
         </insert>
         <insert tableName="user_details" schemaName="security">
             <column name="id" value="842bbaae-7788-4ecb-b441-7c7er45ee8bf"/>
             <column name="user_id" value="842aaaae-7788-4ecb-b441-7c7er450b8bf"/>
-            <column name="name" value="qa1"/>
-            <column name="surname" value="qa1"/>
+            <column name="name" value="Piotr"/>
+            <column name="surname" value="Piotrenko"/>
         </insert>
     </changeSet>
 </databaseChangeLog>
