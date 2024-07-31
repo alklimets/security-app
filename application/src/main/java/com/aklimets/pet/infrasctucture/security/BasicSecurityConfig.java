@@ -1,8 +1,11 @@
 package com.aklimets.pet.infrasctucture.security;
 
 import com.aklimets.pet.infrasctucture.security.entrypoint.AuthEntrypoint;
+import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.infrasctucture.security.provider.BasicAuthProvider;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +28,8 @@ import static com.aklimets.pet.domain.constants.SecurityConstants.WHITE_LIST_URL
 @WithBasicAuth
 public class BasicSecurityConfig {
 
+    private static final Logger LOGGER = LogManager.getLogger(BasicSecurityConfig.class);
+
     @Autowired
     private BasicAuthProvider basicAuthProvider;
 
@@ -33,6 +38,7 @@ public class BasicSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        LOGGER.info("Basic security config has been activated");
         http.headers().cacheControl();
         http.cors().and().csrf().disable()
                 .authorizeRequests()

@@ -7,6 +7,8 @@ import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFilter;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.infrasctucture.security.provider.JwtAuthenticationProvider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +35,7 @@ import java.util.Collections;
 @WithJwtAuth
 public class JwtSecurityConfig {
 
+    private static final Logger LOGGER = LogManager.getLogger(JwtSecurityConfig.class);
 
     @Autowired
     private AuthenticationEntryPoint entryPoint;
@@ -61,6 +64,7 @@ public class JwtSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        LOGGER.info("JWT security config has been activated");
         http.headers().cacheControl();
         http.cors().and().csrf().disable()
                 .authorizeRequests()

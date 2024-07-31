@@ -59,8 +59,8 @@ public class AuthenticationService {
 
     private AuthenticationTokensDTO setToken(User user) {
         var response = new AuthenticationTokensDTO();
-        var access = jwtUtil.generateAccessToken(user.getUsername());
-        var refresh = jwtUtil.generateRefreshToken(user.getUsername());
+        var access = jwtUtil.generateAccessToken(user);
+        var refresh = jwtUtil.generateRefreshToken(user);
         response.setAccessToken(access);
         response.setRefreshToken(refresh);
         user.setRefreshToken(refresh);
