@@ -28,6 +28,11 @@ public class UserService {
         return userRepository.findUserByUsername(username);
     }
 
+    @Transactional(readOnly = true)
+    public User loadUserByUsernameAndRefreshToken(String username, String refreshToken) throws UsernameNotFoundException {
+        return userRepository.findUserByUsernameAndRefreshToken(username, refreshToken);
+    }
+
     @Transactional
     public void saveUser(User user) {
         userRepository.save(user);

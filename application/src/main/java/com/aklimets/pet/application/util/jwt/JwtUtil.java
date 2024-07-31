@@ -8,10 +8,8 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -25,10 +23,10 @@ import static java.lang.Integer.parseInt;
 
 @Component
 public class JwtUtil {
-    private PublicKey accessTokenPublicKey;
-    private PrivateKey accessTokenPrivateKey;
-    private PublicKey refreshTokenPublicKey;
-    private PrivateKey refreshTokenPrivateKey;
+    private final PublicKey accessTokenPublicKey;
+    private final PrivateKey accessTokenPrivateKey;
+    private final PublicKey refreshTokenPublicKey;
+    private final PrivateKey refreshTokenPrivateKey;
 
     @Value("${jwt.access.token.ttl}")
     private String accessTokenTtl;
@@ -36,10 +34,13 @@ public class JwtUtil {
     @Value("${jwt.refresh.token.ttl}")
     private String refreshTokenTtl;
 
-    private PemObject readPemFile(String filename) throws IOException {
-        try (var reader = new FileReader(filename); var pemReader = new PemReader(reader)) {
-            return pemReader.readPemObject();
-        }
+    public JwtUtil() throws Exception {
+        var privateKey = getPrivateKey();
+        var publicKey = getPublicKey();
+        this.accessTokenPublicKey = publicKey;
+        this.accessTokenPrivateKey = privateKey;
+        this.refreshTokenPublicKey = publicKey;
+        this.refreshTokenPrivateKey = privateKey;
     }
 
     public  <T> T extractClaim(Claims claims, Function<Claims, T> extract) {
@@ -75,28 +76,25 @@ public class JwtUtil {
                 .compact();
     }
 
-    public JwtUtil() throws Exception {
-        var privateKey = getPrivateKey("application/src/main/resources/keys/private_key.pem");
-        var publicKey = getPublicKey("application/src/main/resources/keys/public_key.pem");
-        this.accessTokenPublicKey = publicKey;
-        this.accessTokenPrivateKey = privateKey;
-        this.refreshTokenPublicKey = publicKey;
-        this.refreshTokenPrivateKey = privateKey;
-    }
-
-    private PrivateKey getPrivateKey(String filename) throws Exception {
-        var pemObject = readPemFile(filename);
+    private PrivateKey getPrivateKey() throws Exception {
+        var pemObject = readPemFile("application/src/main/resources/keys/private_key.pem");
         var content = pemObject.getContent();
         var spec = new PKCS8EncodedKeySpec(content);
         var kf = KeyFactory.getInstance("RSA");
         return kf.generatePrivate(spec);
     }
 
-    private PublicKey getPublicKey(String filename) throws Exception {
-        var pemObject = readPemFile(filename);
+    private PublicKey getPublicKey() throws Exception {
+        var pemObject = readPemFile("application/src/main/resources/keys/public_key.pem");
         var content = pemObject.getContent();
         var spec = new X509EncodedKeySpec(content);
         var kf = KeyFactory.getInstance("RSA");
         return kf.generatePublic(spec);
+    }
+
+    private PemObject readPemFile(String filename) throws IOException {
+        try (var reader = new FileReader(filename); var pemReader = new PemReader(reader)) {
+            return pemReader.readPemObject();
+        }
     }
 }

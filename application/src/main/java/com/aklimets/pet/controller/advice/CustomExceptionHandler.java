@@ -4,6 +4,7 @@ import com.aklimets.pet.domain.exception.*;
 import com.aklimets.pet.domain.exception.*;
 import com.aklimets.pet.domain.payload.ErrorResponsePayload;
 import com.aklimets.pet.domain.payload.ValidationPayload;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,6 +24,11 @@ public class CustomExceptionHandler {
     @ExceptionHandler(value = UnauthorizedException.class)
     private ResponseEntity<ErrorResponsePayload> handleCustomException(UnauthorizedException exception) {
         return withStatus(401, exception);
+    }
+
+    @ExceptionHandler(value = JwtException.class)
+    private ResponseEntity<ErrorResponsePayload> handleCustomException(JwtException exception) {
+        return withStatus(401, new UnauthorizedException("Jwt token is not valid", exception.getMessage()));
     }
 
     @ExceptionHandler(value = ForbiddenException.class)

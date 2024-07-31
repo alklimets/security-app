@@ -3,22 +3,18 @@ package com.aklimets.pet.controller;
 import com.aklimets.pet.application.service.AuthenticationService;
 import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
-import com.aklimets.pet.domain.dto.request.JwtTokenPairRequestDTO;
+import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequestDTO;
 import com.aklimets.pet.domain.dto.request.UserAuthorizationRequest;
 import com.aklimets.pet.domain.dto.request.UserRegistrationRequest;
 import com.aklimets.pet.domain.dto.request.UserRequestDTO;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensDTO;
 import com.aklimets.pet.domain.dto.response.AuthorizedUserResponseDTO;
 import com.aklimets.pet.domain.payload.ResponsePayload;
-import com.aklimets.pet.domain.dto.request.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/common/security")
@@ -59,7 +54,7 @@ public class SecurityController {
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "Refresh tokens pair", produces = "application/json")
     @PostMapping("/refresh")
-    public ResponseEntity<ResponsePayload<AuthenticationTokensDTO>> refreshTokensPair(@Valid @RequestBody JwtTokenPairRequestDTO tokens) {
+    public ResponseEntity<ResponsePayload<AuthenticationTokensDTO>> refreshTokensPair(@Valid @RequestBody JwtRefreshTokenRequestDTO tokens) {
         return ResponseEntity.ok(authenticationService.refreshTokensPair(tokens));
     }
 

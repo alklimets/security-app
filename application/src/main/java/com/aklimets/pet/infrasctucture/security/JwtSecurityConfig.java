@@ -1,6 +1,6 @@
 package com.aklimets.pet.infrasctucture.security;
 
-import com.aklimets.pet.application.util.jwt.JwtValidator;
+import com.aklimets.pet.application.util.jwt.JwtExtractor;
 import com.aklimets.pet.domain.constants.SecurityConstants;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
@@ -41,7 +41,7 @@ public class JwtSecurityConfig {
     private JwtAuthenticationProvider authenticationProvider;
 
     @Autowired
-    private JwtValidator jwtValidator;
+    private JwtExtractor jwtExtractor;
 
     @Autowired
     private UserRepository userRepository;
@@ -55,7 +55,7 @@ public class JwtSecurityConfig {
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter(authenticationManager(),
                 new JwtSuccessHandler(),
-                jwtValidator,
+                jwtExtractor,
                 userRepository);
     }
 
