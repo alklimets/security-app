@@ -1,5 +1,8 @@
 package com.aklimets.pet.infrasctucture.security.handler;
 
+import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFilter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -10,9 +13,12 @@ import java.io.IOException;
 
 public class JwtSuccessHandler implements AuthenticationSuccessHandler {
 
+    private static final Logger LOGGER = LogManager.getLogger(JwtSuccessHandler.class);
+
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-                                        Authentication authentication) throws IOException, ServletException {
-        System.out.println("Authentication success");
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
+                                        HttpServletResponse httpServletResponse,
+                                        Authentication authentication)  {
+        LOGGER.info("Authentication success");
     }
 }

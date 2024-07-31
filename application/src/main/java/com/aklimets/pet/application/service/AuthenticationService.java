@@ -48,7 +48,7 @@ public class AuthenticationService {
         if (existUser != null && isPasswordEquals(user, existUser) && existUser.getUsername().equals(user.username())) {
             return of(setToken(existUser));
         }
-        throw new UnauthorizedException("Error unauth", "Incorrect login or password");
+        throw new UnauthorizedException("Error unauthorized", "Incorrect login or password");
     }
 
     private boolean isPasswordEquals(UserRequestDTO user, User existingUser) {
