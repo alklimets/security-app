@@ -28,7 +28,7 @@ public class UserDetails {
     private String city;
 
     public static UserDetails from(UserDetailsRequestDTO details) {
-        UserDetails userDetails = new UserDetails();
+        var userDetails = new UserDetails();
         userDetails.setName(details.name());
         userDetails.setSurname(details.surname());
         userDetails.setCountry(details.country());

@@ -36,7 +36,7 @@ public class JwtAuthConfigBean implements AuthConfig {
     }
 
     private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+        var authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = { authorizationScope };
         return List.of(new SecurityReference(ACCESS, authorizationScopes));
     }

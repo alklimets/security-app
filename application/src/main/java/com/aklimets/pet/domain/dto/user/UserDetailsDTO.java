@@ -20,7 +20,7 @@ public class UserDetailsDTO {
     private String username;
 
     public static UserDetailsDTO fromEntity(UserDetails userDetails) {
-        UserDetailsDTO response = new UserDetailsDTO();
+        var response = new UserDetailsDTO();
         response.setId(userDetails.getId());
         response.setName(userDetails.getName());
         response.setSurname(userDetails.getSurname());

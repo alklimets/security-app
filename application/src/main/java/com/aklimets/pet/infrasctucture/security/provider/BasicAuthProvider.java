@@ -1,6 +1,7 @@
 package com.aklimets.pet.infrasctucture.security.provider;
 
 import com.aklimets.pet.application.util.PasswordEncoder;
+import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.application.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,11 @@ public class BasicAuthProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = authentication.getName();
-        String password = authentication.getCredentials().toString();
-        User user = userService.loadUserByUsername(username);
+        var username = authentication.getName();
+        var password = authentication.getCredentials().toString();
+        var user = userService.loadUserByUsername(username);
         if (authenticateInTheSystem(user, username, password)) {
-            return new UsernamePasswordAuthenticationToken(
-                    username, null, user.getAuthorities());
+            return new UserAuthentication(user.getId(), user.getUsername(), user.getAuthorities());
         } else {
             return null;
         }

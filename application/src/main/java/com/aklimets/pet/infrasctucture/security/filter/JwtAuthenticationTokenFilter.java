@@ -1,6 +1,7 @@
 package com.aklimets.pet.infrasctucture.security.filter;
 
 import com.aklimets.pet.application.util.jwt.JwtValidator;
+import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.jwt.JwtUser;
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.user.UserRepository;
@@ -50,16 +51,16 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
-        String accessToken = request.getHeader(authorizationHeader);
+        var accessToken = request.getHeader(authorizationHeader);
 
         if (accessToken == null || !accessToken.startsWith(accessPrefix)) {
             response.sendError(401, "UNAUTHORIZED");
             return null;
         }
         try {
-            JwtUser jwtUser = jwtValidator.validateAccess(accessToken.substring(accessPrefix.length() + 1));
-            User user = userRepository.findUserByUsername(jwtUser.username());
-            return UsernamePasswordAuthenticationToken.authenticated(user.getId(), user.getUsername(), user.getAuthorities().stream().toList());
+            var jwtUser = jwtValidator.validateAccess(accessToken.substring(accessPrefix.length() + 1));
+            var user = userRepository.findUserByUsername(jwtUser.username());
+            return new UserAuthentication(user.getId(), user.getUsername(), user.getAuthorities());
         } catch (JwtException e) {
             response.sendError(401, "UNAUTHORIZED");
             return null;

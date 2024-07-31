@@ -37,7 +37,7 @@ public class JwtUtil {
     private String refreshTokenTtl;
 
     private PemObject readPemFile(String filename) throws IOException {
-        try (Reader reader = new FileReader(filename); PemReader pemReader = new PemReader(reader)) {
+        try (var reader = new FileReader(filename); var pemReader = new PemReader(reader)) {
             return pemReader.readPemObject();
         }
     }
@@ -67,7 +67,7 @@ public class JwtUtil {
     }
 
     private String generateToken(String username, PrivateKey key, String ttl) {
-        Claims claims = Jwts.claims().setSubject(username);
+        var claims = Jwts.claims().setSubject(username);
         return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.RS256, key)
@@ -76,8 +76,8 @@ public class JwtUtil {
     }
 
     public JwtUtil() throws Exception {
-        PrivateKey privateKey = getPrivateKey("application/src/main/resources/keys/private_key.pem");
-        PublicKey publicKey = getPublicKey("application/src/main/resources/keys/public_key.pem");
+        var privateKey = getPrivateKey("application/src/main/resources/keys/private_key.pem");
+        var publicKey = getPublicKey("application/src/main/resources/keys/public_key.pem");
         this.accessTokenPublicKey = publicKey;
         this.accessTokenPrivateKey = privateKey;
         this.refreshTokenPublicKey = publicKey;
@@ -85,18 +85,18 @@ public class JwtUtil {
     }
 
     private PrivateKey getPrivateKey(String filename) throws Exception {
-        PemObject pemObject = readPemFile(filename);
-        byte[] content = pemObject.getContent();
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(content);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
+        var pemObject = readPemFile(filename);
+        var content = pemObject.getContent();
+        var spec = new PKCS8EncodedKeySpec(content);
+        var kf = KeyFactory.getInstance("RSA");
         return kf.generatePrivate(spec);
     }
 
     private PublicKey getPublicKey(String filename) throws Exception {
-        PemObject pemObject = readPemFile(filename);
-        byte[] content = pemObject.getContent();
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(content);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
+        var pemObject = readPemFile(filename);
+        var content = pemObject.getContent();
+        var spec = new X509EncodedKeySpec(content);
+        var kf = KeyFactory.getInstance("RSA");
         return kf.generatePublic(spec);
     }
 }

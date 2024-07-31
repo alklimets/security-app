@@ -2,12 +2,11 @@ package com.aklimets.pet.application.service;
 
 
 import com.aklimets.pet.application.util.PasswordEncoder;
-import com.aklimets.pet.application.util.jwt.JwtValidator;
-import com.aklimets.pet.domain.dto.jwt.JwtUser;
-import com.aklimets.pet.domain.dto.request.UserAuthorizationRequest;
 import com.aklimets.pet.application.util.jwt.JwtUtil;
+import com.aklimets.pet.application.util.jwt.JwtValidator;
 import com.aklimets.pet.domain.constants.Roles;
 import com.aklimets.pet.domain.dto.request.JwtTokenPairRequestDTO;
+import com.aklimets.pet.domain.dto.request.UserAuthorizationRequest;
 import com.aklimets.pet.domain.dto.request.UserRegistrationRequest;
 import com.aklimets.pet.domain.dto.request.UserRequestDTO;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensDTO;
@@ -46,7 +45,7 @@ public class AuthenticationService {
 
     @Transactional
     public ResponsePayload<AuthenticationTokensDTO> authenticate(UserRequestDTO user) {
-        User existUser = userService.loadUserByUsername(user.username());
+        var existUser = userService.loadUserByUsername(user.username());
         if (existUser != null && isPasswordEquals(user, existUser) && existUser.getUsername().equals(user.username())) {
             return of(setToken(existUser));
         }
@@ -54,15 +53,15 @@ public class AuthenticationService {
     }
 
     private boolean isPasswordEquals(UserRequestDTO user, User existingUser) {
-        String password = passwordEncoder.encode(user.password());
-        String password1 = existingUser.getPassword();
+        var password = passwordEncoder.encode(user.password());
+        var password1 = existingUser.getPassword();
         return password.equals(password1);
     }
 
     private AuthenticationTokensDTO setToken(User user) {
-        AuthenticationTokensDTO response = new AuthenticationTokensDTO();
-        String access = jwtUtil.generateAccessToken(user.getUsername());
-        String refresh = jwtUtil.generateRefreshToken(user.getUsername());
+        var response = new AuthenticationTokensDTO();
+        var access = jwtUtil.generateAccessToken(user.getUsername());
+        var refresh = jwtUtil.generateRefreshToken(user.getUsername());
         response.setAccessToken(access);
         response.setRefreshToken(refresh);
         user.setRefreshToken(refresh);
@@ -71,11 +70,11 @@ public class AuthenticationService {
 
     @Transactional
     public ResponsePayload<AuthenticationTokensDTO> refreshTokensPair(JwtTokenPairRequestDTO tokens) {
-        JwtUser accessUser = jwtValidator.validateAccess(tokens.accessToken());
-        JwtUser refreshUser = jwtValidator.validateRefresh(tokens.refreshToken());
+        var accessUser = jwtValidator.validateAccess(tokens.accessToken());
+        var refreshUser = jwtValidator.validateRefresh(tokens.refreshToken());
 
         if (accessUser != null && refreshUser != null) {
-            User existUser = userService.loadUserByUsername(accessUser.username());
+            var existUser = userService.loadUserByUsername(accessUser.username());
             return of(setToken(existUser));
         }
         throw new UnauthorizedException("Error tkn", "Tokens are not valid");
@@ -83,21 +82,21 @@ public class AuthenticationService {
 
     @Transactional
     public ResponsePayload<AuthenticationTokensDTO> register(UserRegistrationRequest request) {
-        User existUser = userService.loadUserByUsername(request.username());
+        var existUser = userService.loadUserByUsername(request.username());
         if (existUser != null) {
             throw new BadRequestException("Error exists", "User with current username exists");
         }
-        User user = new User();
+        var user = new User();
         user.setId(UUID.randomUUID().toString());
         user.setUsername(request.username());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setRole(Roles.USER);
 
-        UserDetails details = UserDetails.from(request.details());
+        var details = UserDetails.from(request.details());
         details.setId(UUID.randomUUID().toString());
         details.setUserId(user.getId());
 
-        AuthenticationTokensDTO response = setToken(user);
+        var response = setToken(user);
         userService.saveUser(user);
         userService.saveUserDetails(details);
 
@@ -106,11 +105,11 @@ public class AuthenticationService {
 
     @Transactional
     public ResponsePayload<AuthorizedUserResponseDTO> authorize(UserAuthorizationRequest authorizationRequest) {
-        String accessToken = authorizationRequest.accessToken();
+        var accessToken = authorizationRequest.accessToken();
         try{
-            JwtUser jwtUser = jwtValidator.validateAccess(accessToken);
-            User user = userService.loadUserByUsername(jwtUser.username());
-            AuthorizedUserResponseDTO response = new AuthorizedUserResponseDTO();
+            var jwtUser = jwtValidator.validateAccess(accessToken);
+            var user = userService.loadUserByUsername(jwtUser.username());
+            var response = new AuthorizedUserResponseDTO();
             response.setId(user.getId());
             response.setUsername(user.getUsername());
             response.setAuthorities(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
