@@ -14,6 +14,7 @@ import com.aklimets.pet.domain.exception.UnauthorizedException;
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.userdetails.UserDetails;
 import com.aklimets.pet.domain.payload.ResponsePayload;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import static com.aklimets.pet.domain.payload.ResponsePayload.of;
 
 
 @Service
+@Slf4j
 public class AuthenticationService {
 
     private final UserService userService;

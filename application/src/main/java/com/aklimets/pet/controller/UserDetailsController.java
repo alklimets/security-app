@@ -1,12 +1,13 @@
 package com.aklimets.pet.controller;
 
+import com.aklimets.pet.application.service.UserService;
 import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.user.UserDetailsDTO;
 import com.aklimets.pet.domain.payload.ResponsePayload;
-import com.aklimets.pet.application.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/common/details") // api versioning included
 @SwaggerDefinition(consumes = "application/json", produces = "application/json")
 @Api(tags = "Details API", value = "API to work with security")
+@Slf4j
 public class UserDetailsController {
 
     private final UserService userService;

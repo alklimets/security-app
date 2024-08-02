@@ -11,6 +11,7 @@ import com.aklimets.pet.domain.payload.ResponsePayload;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/common/security")
 @SwaggerDefinition(consumes = "application/json", produces = "application/json") // swagger related annotation
 @Api(tags = "Security API", value = "API to work with security") // swagger related annotation with info about APIs
+@Slf4j
 public class SecurityController {
 
     private final AuthenticationService authenticationService;

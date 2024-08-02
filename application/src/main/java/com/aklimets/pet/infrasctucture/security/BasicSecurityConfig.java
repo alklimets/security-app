@@ -3,6 +3,7 @@ package com.aklimets.pet.infrasctucture.security;
 import com.aklimets.pet.infrasctucture.security.entrypoint.AuthEntrypoint;
 import com.aklimets.pet.infrasctucture.security.provider.BasicAuthProvider;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,8 @@ import static com.aklimets.pet.infrasctucture.security.constants.SecurityConstan
 @Configuration
 @EnableWebSecurity
 @WithBasicAuth
+@Slf4j
 public class BasicSecurityConfig {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BasicSecurityConfig.class);
 
     @Autowired
     private BasicAuthProvider basicAuthProvider;
@@ -37,7 +37,7 @@ public class BasicSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        LOGGER.info("Basic security config has been activated");
+        log.info("Basic security config has been activated");
         http.headers().cacheControl();
         http.cors().and().csrf().disable()
                 .authorizeRequests()

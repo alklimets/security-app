@@ -6,8 +6,7 @@ import com.aklimets.pet.domain.dto.jwt.JwtUser;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import io.jsonwebtoken.JwtException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -23,9 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
+@Slf4j
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
     @Value("${security.authorization.header}")
     public String authorizationHeader;
@@ -65,7 +63,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         try {
             authentication = createUserAuthentication(jwtExtractor.extractAccessJwtUser(extractTokenValue(accessToken)));
         } catch (JwtException e) {
-            LOGGER.warn("Error during jwt verification: {}", e.getMessage());
+            log.warn("Error during jwt verification: {}", e.getMessage());
             sendUnauthorizedError(response);
         }
         return authentication;

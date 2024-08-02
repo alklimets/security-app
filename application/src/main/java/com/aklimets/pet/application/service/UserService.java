@@ -1,15 +1,15 @@
 package com.aklimets.pet.application.service;
 
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
-import com.aklimets.pet.domain.dto.request.UserAuthorizationRequest;
 import com.aklimets.pet.domain.dto.response.AuthorizedUserResponseDTO;
 import com.aklimets.pet.domain.dto.user.UserDetailsDTO;
-import com.aklimets.pet.domain.model.user.User;
-import com.aklimets.pet.domain.model.userdetails.UserDetails;
 import com.aklimets.pet.domain.exception.NotFoundException;
+import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.user.UserRepository;
+import com.aklimets.pet.domain.model.userdetails.UserDetails;
 import com.aklimets.pet.domain.model.userdetails.UserDetailsRepository;
 import com.aklimets.pet.domain.payload.ResponsePayload;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.aklimets.pet.domain.payload.ResponsePayload.of;
 
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;

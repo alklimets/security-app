@@ -1,21 +1,19 @@
 package com.aklimets.pet.infrasctucture.security.handler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
 public class JwtSuccessHandler implements AuthenticationSuccessHandler {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtSuccessHandler.class);
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
                                         Authentication authentication)  {
-        LOGGER.info("Authentication success, authenticated user: {}", authentication);
+        log.info("Authentication success, authenticated user: {}", authentication);
     }
 }

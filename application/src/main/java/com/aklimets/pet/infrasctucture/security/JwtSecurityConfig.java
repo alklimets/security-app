@@ -1,15 +1,14 @@
 package com.aklimets.pet.infrasctucture.security;
 
 import com.aklimets.pet.application.util.jwt.JwtExtractor;
-import com.aklimets.pet.infrasctucture.security.constants.SecurityConstants;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
+import com.aklimets.pet.infrasctucture.security.constants.SecurityConstants;
 import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFilter;
 import com.aklimets.pet.infrasctucture.security.filter.RequestIdFilter;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.infrasctucture.security.provider.JwtAuthenticationProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,9 +33,8 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 @WithJwtAuth
+@Slf4j
 public class JwtSecurityConfig {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtSecurityConfig.class);
 
     @Autowired
     private AuthenticationEntryPoint entryPoint;
@@ -51,7 +49,7 @@ public class JwtSecurityConfig {
     private UserRepository userRepository;
 
     @Autowired
-    RequestIdFilter requestIdFilter;
+    private RequestIdFilter requestIdFilter;
 
     @Bean
     public AuthenticationManager authenticationManager() {
@@ -68,35 +66,32 @@ public class JwtSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        LOGGER.info("JWT security config has been activated");
+        log.info("JWT security config has been activated");
         http.headers().cacheControl();
         http.cors().and().csrf().disable()
                 // this section will be called after jwt filter work, jwt filter provides authentication instance
                 // and then this instance will be used there
-                .authorizeRequests()
-
-                    // if some endpoints does not require authentication then they should be included in the whitelist
-                    .antMatchers(SecurityConstants.WHITE_LIST_URLS).permitAll()
-
-                    // if we want to manage authorities directly using spring security we can do it this way,
-                    // list of authorities will be provided by the jwt filter and then this authorities will be
-                    // used, to work with authorities method hasAuthority should be used instead of hasRole
-//                    .antMatchers("/api/v1/common/security/authenticate").hasAuthority("ADMIN")
-
-                    // all other urls will require authentication, if jwt filter returns null then 401 error will
-                    // be returned automatically
-                    .antMatchers("/**").authenticated() // will be called after jwt filter
-                .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                    .exceptionHandling().authenticationEntryPoint(entryPoint)
-                .and()
-
-                    // httpSecurity has a list of predefined filters, by using addFilter before and after we
-                    // can choose any available class, e. g. UsernamePasswordAuthenticationFilter
-                    .addFilterAfter(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                    .addFilterBefore(requestIdFilter, UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests(auth -> {
+                    try {
+                        auth
+                                .antMatchers(SecurityConstants.WHITE_LIST_URLS).permitAll() // if some endpoints does not require authentication then they should be included in the whitelist
+                                .antMatchers("/**").authenticated()
+                                .and()
+                                .exceptionHandling().authenticationEntryPoint(entryPoint)
+                                .and()
+                                .sessionManagement()
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                                .and()
+                                .addFilterAfter(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class) // httpSecurity has a list of predefined filters, by using addFilter before and after we  can choose any available class, e. g. UsernamePasswordAuthenticationFilter
+                                .addFilterBefore(requestIdFilter, UsernamePasswordAuthenticationFilter.class); // all other urls will require authentication, if jwt filter returns null then 401 error will  be returned automatically, will be called after jwt filter
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
         return http.build();
     }
 }
+// if we want to manage authorities directly using spring security we can do it this way,
+// list of authorities will be provided by the jwt filter and then this authorities will be
+// used, to work with authorities method hasAuthority should be used instead of hasRole
+//                           .antMatchers("/api/v1/common/security/authenticate").hasAuthority("ADMIN")

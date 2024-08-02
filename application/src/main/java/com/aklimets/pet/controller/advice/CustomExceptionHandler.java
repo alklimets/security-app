@@ -1,10 +1,10 @@
 package com.aklimets.pet.controller.advice;
 
 import com.aklimets.pet.domain.exception.*;
-import com.aklimets.pet.domain.exception.*;
 import com.aklimets.pet.domain.payload.ErrorResponsePayload;
 import com.aklimets.pet.domain.payload.ValidationPayload;
 import io.jsonwebtoken.JwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.List;
 
 @ControllerAdvice
+@Slf4j
 public class CustomExceptionHandler {
 
     @ExceptionHandler(value = NotFoundException.class)
