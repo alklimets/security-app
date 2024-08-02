@@ -10,6 +10,7 @@ import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.infrasctucture.security.provider.JwtAuthenticationProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Collections;
@@ -35,6 +37,12 @@ import java.util.Collections;
 @WithJwtAuth
 @Slf4j
 public class JwtSecurityConfig {
+
+    @Value("${security.authorization.header}")
+    public String authorizationHeader;
+
+    @Value("${jwt.access.token.prefix}")
+    public String accessPrefix;
 
     @Autowired
     private AuthenticationEntryPoint entryPoint;
@@ -56,9 +64,12 @@ public class JwtSecurityConfig {
         return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
 
-    @Bean
+    // if filter is a bean then it will be added once automatically, and if it will be added manually also then filter will be called twice
+//    @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
-        return new JwtAuthenticationTokenFilter(authenticationManager(),
+        return new JwtAuthenticationTokenFilter(authorizationHeader,
+                accessPrefix,
+                authenticationManager(),
                 new JwtSuccessHandler(),
                 jwtExtractor,
                 userRepository);
@@ -71,19 +82,19 @@ public class JwtSecurityConfig {
         http.cors().and().csrf().disable()
                 // this section will be called after jwt filter work, jwt filter provides authentication instance
                 // and then this instance will be used there
-                .authorizeHttpRequests(auth -> {
+                .authorizeRequests(auth -> {
                     try {
                         auth
                                 .antMatchers(SecurityConstants.WHITE_LIST_URLS).permitAll() // if some endpoints does not require authentication then they should be included in the whitelist
-                                .antMatchers("/**").authenticated()
+                                .anyRequest().authenticated()
                                 .and()
                                 .exceptionHandling().authenticationEntryPoint(entryPoint)
                                 .and()
                                 .sessionManagement()
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                                 .and()
-                                .addFilterAfter(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class) // httpSecurity has a list of predefined filters, by using addFilter before and after we  can choose any available class, e. g. UsernamePasswordAuthenticationFilter
-                                .addFilterBefore(requestIdFilter, UsernamePasswordAuthenticationFilter.class); // all other urls will require authentication, if jwt filter returns null then 401 error will  be returned automatically, will be called after jwt filter
+                                .addFilterBefore(jwtAuthenticationTokenFilter(), AuthorizationFilter.class) // httpSecurity has a list of predefined filters, by using addFilter before and after we  can choose any available class, e. g. UsernamePasswordAuthenticationFilter
+                                .addFilterBefore(requestIdFilter, JwtAuthenticationTokenFilter.class); // all other urls will require authentication, if jwt filter returns null then 401 error will  be returned automatically, will be called after jwt filter
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

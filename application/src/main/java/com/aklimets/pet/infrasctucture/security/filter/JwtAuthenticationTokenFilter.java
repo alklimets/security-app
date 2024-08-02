@@ -7,7 +7,6 @@ import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,16 +24,18 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
-    @Value("${security.authorization.header}")
     public String authorizationHeader;
 
-    @Value("${jwt.access.token.prefix}")
     public String accessPrefix;
+
     private final JwtExtractor jwtExtractor;
+
     private final UserRepository userRepository;
 
 
-    public JwtAuthenticationTokenFilter(AuthenticationManager authenticationManager,
+    public JwtAuthenticationTokenFilter(String authorizationHeader,
+                                        String accessPrefix,
+                                        AuthenticationManager authenticationManager,
                                         JwtSuccessHandler jwtSuccessHandler,
                                         JwtExtractor jwtExtractor,
                                         UserRepository userRepository) {
@@ -49,6 +50,8 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         setAuthenticationSuccessHandler(jwtSuccessHandler);
         this.jwtExtractor = jwtExtractor;
         this.userRepository = userRepository;
+        this.authorizationHeader = authorizationHeader;
+        this.accessPrefix = accessPrefix;
     }
 
     @Override
@@ -83,7 +86,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         return accessToken.substring(accessPrefix.length() + 1);
     }
 
-    private static void sendUnauthorizedError(HttpServletResponse response) throws IOException {
+    private void sendUnauthorizedError(HttpServletResponse response) throws IOException {
         response.sendError(401, "UNAUTHORIZED");
     }
 
