@@ -93,7 +93,7 @@ public class JwtSecurityConfig {
                                 .sessionManagement()
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                                 .and()
-                                .addFilterBefore(jwtAuthenticationTokenFilter(), AuthorizationFilter.class) // httpSecurity has a list of predefined filters, by using addFilter before and after we  can choose any available class, e. g. UsernamePasswordAuthenticationFilter
+                                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class) // httpSecurity has a list of predefined filters, by using addFilter before and after we  can choose any available class, e. g. UsernamePasswordAuthenticationFilter
                                 .addFilterBefore(requestIdFilter, JwtAuthenticationTokenFilter.class); // all other urls will require authentication, if jwt filter returns null then 401 error will  be returned automatically, will be called after jwt filter
                     } catch (Exception e) {
                         throw new RuntimeException(e);
