@@ -1,9 +1,8 @@
 package com.aklimets.pet.infrasctucture.security;
 
 import com.aklimets.pet.infrasctucture.security.annotation.NoAuth;
-import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @NoAuth
 public class NoAuthSecurityConfig {
 
-    private static final Logger LOGGER = LogManager.getLogger(NoAuthSecurityConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NoAuthSecurityConfig.class);
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

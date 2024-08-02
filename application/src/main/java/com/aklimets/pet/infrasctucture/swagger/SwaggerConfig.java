@@ -30,19 +30,7 @@ public class SwaggerConfig {
     private AuthConfig authConfig;
 
     @Bean
-    @NoAuth
     public Docket securityApiWithoutAuth() {
-        return getSecurityApiDocket();
-    }
-
-    @Bean
-    @WithJwtAuth
-    @WithBasicAuth
-    public Docket securityApi() {
-        return getSecurityApiDocket().securitySchemes(authConfig.getApiKeys()).securityContexts(authConfig.getSecurityContext());
-    }
-
-    private Docket getSecurityApiDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("Security API")
                 .select()

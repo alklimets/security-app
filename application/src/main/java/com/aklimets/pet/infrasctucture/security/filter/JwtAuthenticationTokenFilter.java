@@ -6,8 +6,8 @@ import com.aklimets.pet.domain.dto.jwt.JwtUser;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import io.jsonwebtoken.JwtException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -25,7 +25,7 @@ import java.io.IOException;
 
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final Logger LOGGER = LogManager.getLogger(JwtAuthenticationTokenFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
 
     @Value("${security.authorization.header}")
     public String authorizationHeader;

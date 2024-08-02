@@ -3,8 +3,8 @@ package com.aklimets.pet.infrasctucture.security;
 import com.aklimets.pet.infrasctucture.security.entrypoint.AuthEntrypoint;
 import com.aklimets.pet.infrasctucture.security.provider.BasicAuthProvider;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,7 @@ import static com.aklimets.pet.infrasctucture.security.constants.SecurityConstan
 @WithBasicAuth
 public class BasicSecurityConfig {
 
-    private static final Logger LOGGER = LogManager.getLogger(BasicSecurityConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BasicSecurityConfig.class);
 
     @Autowired
     private BasicAuthProvider basicAuthProvider;

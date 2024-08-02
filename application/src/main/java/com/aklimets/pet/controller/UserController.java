@@ -10,6 +10,8 @@ import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @WithJwtAuth
 public class UserController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
 
     @Autowired
@@ -36,6 +40,7 @@ public class UserController {
     @ApiOperation(value = "Authorize", produces = "application/json")
     @GetMapping("/authorize")
     public ResponseEntity<ResponsePayload<AuthorizedUserResponseDTO>> authorize(@ApiIgnore UserAuthentication authentication) {
+        LOGGER.info("Authenticated user: {}", authentication); // by providing class which implements authentication or principal the object will be populated automatically
         return ResponseEntity.ok(userService.authorize(authentication));
     }
 }

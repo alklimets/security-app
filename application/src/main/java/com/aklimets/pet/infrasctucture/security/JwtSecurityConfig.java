@@ -5,10 +5,11 @@ import com.aklimets.pet.infrasctucture.security.constants.SecurityConstants;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFilter;
+import com.aklimets.pet.infrasctucture.security.filter.RequestIdFilter;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.infrasctucture.security.provider.JwtAuthenticationProvider;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,7 @@ import java.util.Collections;
 @WithJwtAuth
 public class JwtSecurityConfig {
 
-    private static final Logger LOGGER = LogManager.getLogger(JwtSecurityConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtSecurityConfig.class);
 
     @Autowired
     private AuthenticationEntryPoint entryPoint;
@@ -48,6 +49,9 @@ public class JwtSecurityConfig {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    RequestIdFilter requestIdFilter;
 
     @Bean
     public AuthenticationManager authenticationManager() {
@@ -91,7 +95,8 @@ public class JwtSecurityConfig {
 
                     // httpSecurity has a list of predefined filters, by using addFilter before and after we
                     // can choose any available class, e. g. UsernamePasswordAuthenticationFilter
-                    .addFilterAfter(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterAfter(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(requestIdFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

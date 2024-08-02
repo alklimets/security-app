@@ -1,8 +1,7 @@
 package com.aklimets.pet.infrasctucture.security.entrypoint;
 
-import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,7 @@ import java.io.IOException;
 @Component
 public class AuthEntrypoint implements AuthenticationEntryPoint {
 
-    private static final Logger LOGGER = LogManager.getLogger(AuthEntrypoint.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthEntrypoint.class);
 
     @Override
     public void commence(HttpServletRequest request,
