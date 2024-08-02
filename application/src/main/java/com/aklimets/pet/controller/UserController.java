@@ -1,6 +1,6 @@
 package com.aklimets.pet.controller;
 
-import com.aklimets.pet.application.service.UserService;
+import com.aklimets.pet.application.service.user.UserAppService;
 import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.response.AuthorizedUserResponseDTO;
@@ -27,10 +27,10 @@ import springfox.documentation.annotations.ApiIgnore;
 @Slf4j
 public class UserController {
 
-    private final UserService userService;
+    private final UserAppService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserAppService userService) {
         this.userService = userService;
     }
 

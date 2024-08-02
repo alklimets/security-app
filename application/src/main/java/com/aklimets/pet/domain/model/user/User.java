@@ -1,6 +1,7 @@
 package com.aklimets.pet.domain.model.user;
 
 import com.aklimets.pet.domain.attribute.Roles;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,10 +12,14 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Aggregate root
+ */
 @Getter
 @Setter
 @Entity
 @Table(name = "users", schema = "security")
+@AllArgsConstructor
 public class User implements UserDetails {
     @Id
     private String id;
@@ -28,7 +33,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
-    public User() {
+    protected User() {
     }
 
     @Override
@@ -64,5 +69,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+
     }
 }

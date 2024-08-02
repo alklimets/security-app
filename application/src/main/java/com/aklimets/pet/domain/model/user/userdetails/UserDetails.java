@@ -1,4 +1,4 @@
-package com.aklimets.pet.domain.model.userdetails;
+package com.aklimets.pet.domain.model.user.userdetails;
 
 
 import com.aklimets.pet.domain.dto.request.UserDetailsRequestDTO;
@@ -13,7 +13,6 @@ import javax.persistence.Table;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "user_details", schema = "security")
@@ -27,13 +26,6 @@ public class UserDetails {
     private String country;
     private String city;
 
-    public static UserDetails from(UserDetailsRequestDTO details) {
-        var userDetails = new UserDetails();
-        userDetails.setName(details.name());
-        userDetails.setSurname(details.surname());
-        userDetails.setCountry(details.country());
-        userDetails.setCity(details.city());
-        return userDetails;
-    }
+    protected UserDetails () {}
 
 }

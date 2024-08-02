@@ -1,4 +1,4 @@
-package com.aklimets.pet.domain.model.userdetails;
+package com.aklimets.pet.domain.model.user.userdetails;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

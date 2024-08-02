@@ -1,6 +1,6 @@
 package com.aklimets.pet.controller;
 
-import com.aklimets.pet.application.service.AuthenticationService;
+import com.aklimets.pet.application.service.authentication.AuthenticationAppService;
 import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequestDTO;
@@ -29,10 +29,10 @@ import javax.validation.Valid;
 @Slf4j
 public class SecurityController {
 
-    private final AuthenticationService authenticationService;
+    private final AuthenticationAppService authenticationService;
 
     @Autowired
-    public SecurityController(AuthenticationService authenticationService) {
+    public SecurityController(AuthenticationAppService authenticationService) {
         this.authenticationService = authenticationService;
     }
 

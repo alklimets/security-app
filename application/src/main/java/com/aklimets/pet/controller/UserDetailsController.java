@@ -1,9 +1,12 @@
 package com.aklimets.pet.controller;
 
-import com.aklimets.pet.application.service.UserService;
+import com.aklimets.pet.application.service.user.UserAppService;
 import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
+import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.user.UserDetailsDTO;
 import com.aklimets.pet.domain.payload.ResponsePayload;
+import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
+import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
@@ -14,18 +17,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api/v1/common/details") // api versioning included
 @SwaggerDefinition(consumes = "application/json", produces = "application/json")
 @Api(tags = "Details API", value = "API to work with security")
+@WithBasicAuth
+@WithJwtAuth
 @Slf4j
 public class UserDetailsController {
 
-    private final UserService userService;
+    private final UserAppService userService;
 
     @Autowired
-    public UserDetailsController(UserService userService) {
+    public UserDetailsController(UserAppService userService) {
         this.userService = userService;
     }
 
@@ -33,6 +39,13 @@ public class UserDetailsController {
     @ApiOperation(value = "User details", produces = "application/json")
     @GetMapping("/{userId}")
     public ResponseEntity<ResponsePayload<UserDetailsDTO>> getUserDetails(@PathVariable("userId") String userId) {
-        return ResponseEntity.ok(ResponsePayload.of(userService.getUserDetails(userId)));
+        return ResponseEntity.ok(userService.getUserDetails(userId));
+    }
+
+    @DefaultSwaggerEndpoint
+    @ApiOperation(value = "User details", produces = "application/json")
+    @GetMapping
+    public ResponseEntity<ResponsePayload<UserDetailsDTO>> getAuthenticatedUserDetails(@ApiIgnore UserAuthentication authentication) {
+        return ResponseEntity.ok(userService.getAuthenticatedUserDetails(authentication));
     }
 }
