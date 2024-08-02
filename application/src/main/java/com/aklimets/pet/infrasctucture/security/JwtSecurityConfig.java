@@ -1,7 +1,7 @@
 package com.aklimets.pet.infrasctucture.security;
 
 import com.aklimets.pet.application.util.jwt.JwtExtractor;
-import com.aklimets.pet.domain.constants.SecurityConstants;
+import com.aklimets.pet.infrasctucture.security.constants.SecurityConstants;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFilter;

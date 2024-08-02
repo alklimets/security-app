@@ -1,6 +1,6 @@
 package com.aklimets.pet.domain.model.user;
 
-import com.aklimets.pet.domain.constants.Roles;
+import com.aklimets.pet.domain.attribute.Roles;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

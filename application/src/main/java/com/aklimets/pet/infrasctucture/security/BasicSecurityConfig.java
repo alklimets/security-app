@@ -1,7 +1,6 @@
 package com.aklimets.pet.infrasctucture.security;
 
 import com.aklimets.pet.infrasctucture.security.entrypoint.AuthEntrypoint;
-import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.infrasctucture.security.provider.BasicAuthProvider;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static com.aklimets.pet.domain.constants.SecurityConstants.WHITE_LIST_URLS;
+import static com.aklimets.pet.infrasctucture.security.constants.SecurityConstants.WHITE_LIST_URLS;
 
 /**
  * Configuration enables basic security for the module

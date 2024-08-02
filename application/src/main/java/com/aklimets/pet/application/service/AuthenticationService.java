@@ -4,7 +4,7 @@ package com.aklimets.pet.application.service;
 import com.aklimets.pet.application.util.PasswordEncoder;
 import com.aklimets.pet.application.util.jwt.JwtExtractor;
 import com.aklimets.pet.application.util.jwt.JwtUtil;
-import com.aklimets.pet.domain.constants.Roles;
+import com.aklimets.pet.domain.attribute.Roles;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequestDTO;
 import com.aklimets.pet.domain.dto.request.UserAuthorizationRequest;
 import com.aklimets.pet.domain.dto.request.UserRegistrationRequest;
