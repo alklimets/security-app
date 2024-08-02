@@ -6,18 +6,15 @@ import com.aklimets.pet.application.util.jwt.JwtExtractor;
 import com.aklimets.pet.application.util.jwt.JwtUtil;
 import com.aklimets.pet.domain.attribute.Roles;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequestDTO;
-import com.aklimets.pet.domain.dto.request.UserAuthorizationRequest;
 import com.aklimets.pet.domain.dto.request.UserRegistrationRequest;
 import com.aklimets.pet.domain.dto.request.UserRequestDTO;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensDTO;
-import com.aklimets.pet.domain.dto.response.AuthorizedUserResponseDTO;
 import com.aklimets.pet.domain.exception.BadRequestException;
 import com.aklimets.pet.domain.exception.UnauthorizedException;
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.userdetails.UserDetails;
 import com.aklimets.pet.domain.payload.ResponsePayload;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,18 +95,5 @@ public class AuthenticationService {
         userService.saveUserDetails(details);
 
         return of(response);
-    }
-
-    @Transactional
-    public ResponsePayload<AuthorizedUserResponseDTO> authorize(UserAuthorizationRequest authorizationRequest) {
-        var accessToken = authorizationRequest.accessToken();
-        var jwtUser = jwtExtractor.extractAccessJwtUser(accessToken);
-        var user = userService.loadUserByUsername(jwtUser.username());
-        var responseDTO = new AuthorizedUserResponseDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
-        );
-        return of(responseDTO);
     }
 }

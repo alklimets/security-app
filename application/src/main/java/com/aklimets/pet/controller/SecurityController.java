@@ -18,10 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
@@ -47,13 +44,6 @@ public class SecurityController {
     public ResponseEntity<ResponsePayload<AuthenticationTokensDTO>> authenticate(@Valid @RequestBody UserRequestDTO user, @ApiIgnore UserAuthentication principal) {
         LOGGER.info("Authenticated user: {}", principal); // by providing class which implements authentication or principal the object will be populated automatically
         return ResponseEntity.ok(authenticationService.authenticate(user));
-    }
-
-    @DefaultSwaggerEndpoint
-    @ApiOperation(value = "Authorize", produces = "application/json")
-    @PostMapping("/authorize")
-    public ResponseEntity<ResponsePayload<AuthorizedUserResponseDTO>> authorize(@Valid @RequestBody UserAuthorizationRequest authorizationRequest) {
-        return ResponseEntity.ok(authenticationService.authorize(authorizationRequest));
     }
 
     @DefaultSwaggerEndpoint

@@ -67,15 +67,28 @@ public class JwtSecurityConfig {
         LOGGER.info("JWT security config has been activated");
         http.headers().cacheControl();
         http.cors().and().csrf().disable()
+                // this section will be called after jwt filter work, jwt filter provides authentication instance
+                // and then this instance will be used there
                 .authorizeRequests()
+
+                    // if some endpoints does not require authentication then they should be included in the whitelist
                     .antMatchers(SecurityConstants.WHITE_LIST_URLS).permitAll()
-                    .antMatchers("/**").authenticated()
+
+                    // if we want to manage authorities directly using spring security we can do it this way,
+                    // list of authorities will be provided by the jwt filter and then this authorities will be
+                    // used, to work with authorities method hasAuthority should be used instead of hasRole
+//                    .antMatchers("/api/v1/common/security/authenticate").hasAuthority("ADMIN")
+
+                    // all other urls will require authentication, if jwt filter returns null then 401 error will
+                    // be returned automatically
+                    .antMatchers("/**").authenticated() // will be called after jwt filter
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and()
+
                     // httpSecurity has a list of predefined filters, by using addFilter before and after we
                     // can choose any available class, e. g. UsernamePasswordAuthenticationFilter
                     .addFilterAfter(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -79,4 +79,21 @@ public class SwaggerConfig {
                         typeResolver.resolve(ValidationPayload.class));
     }
 
+    @Bean
+    @WithBasicAuth
+    @WithJwtAuth
+    public Docket userApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("User API")
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.ant("/api/v1/common/user/**"))
+                .build()
+                .additionalModels(typeResolver.resolve(ErrorResponsePayload.class),
+                        typeResolver.resolve(ResponsePayload.class),
+                        typeResolver.resolve(ValidationPayload.class))
+                .securitySchemes(authConfig.getApiKeys())
+                .securityContexts(authConfig.getSecurityContext());
+    }
+
 }

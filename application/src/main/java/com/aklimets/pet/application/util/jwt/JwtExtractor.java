@@ -8,8 +8,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtExtractor {
 
+    private final JwtUtil jwtUtil;
+
     @Autowired
-    private JwtUtil jwtUtil;
+    public JwtExtractor(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
     public JwtUser extractAccessJwtUser(String token) {
         var claims = jwtUtil.extractAccessClaims(token);
