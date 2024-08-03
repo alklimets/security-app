@@ -2,17 +2,17 @@ package com.aklimets.pet.application.service.authentication;
 
 
 import com.aklimets.pet.application.annotation.ApplicationService;
+import com.aklimets.pet.application.envelope.ResponseEnvelope;
+import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
-import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
 import com.aklimets.pet.domain.exception.BadRequestException;
 import com.aklimets.pet.domain.exception.UnauthorizedException;
 import com.aklimets.pet.domain.model.user.UserFactory;
 import com.aklimets.pet.domain.model.user.userdetails.UserDetailsFactory;
-import com.aklimets.pet.application.envelope.ResponseEnvelope;
 import com.aklimets.pet.domain.service.UserDomainService;
-import com.aklimets.pet.jwt.JwtExtractor;
+import com.aklimets.pet.util.jwt.JwtExtractor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
