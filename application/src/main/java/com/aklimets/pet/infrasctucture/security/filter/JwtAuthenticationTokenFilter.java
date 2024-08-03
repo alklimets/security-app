@@ -3,26 +3,25 @@ package com.aklimets.pet.infrasctucture.security.filter;
 import com.aklimets.pet.application.util.jwt.JwtExtractor;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.jwt.JwtUser;
+import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static java.lang.String.format;
 
 
 @Slf4j
@@ -99,7 +98,8 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     }
 
     private UserAuthentication createUserAuthentication(JwtUser jwtUser) {
-        var user = userRepository.findUserByUsername(jwtUser.username());
+        var user = userRepository.findById(jwtUser.id())
+                .orElseThrow(() -> new NotFoundException("Error not found", format("User with id %s not found", jwtUser.id())));
         return new UserAuthentication(user.getId(), user.getUsername(), user.getAuthorities());
     }
 }

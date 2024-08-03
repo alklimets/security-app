@@ -72,6 +72,6 @@ public class User implements UserDetails {
     }
 
     public void updateRefreshToken(String refreshToken) {
-
+        this.refreshToken = refreshToken;
     }
 }

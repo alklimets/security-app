@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.aklimets.pet.domain.payload.ResponsePayload.of;
+import static java.lang.String.format;
 
 @ApplicationService
 @AllArgsConstructor
@@ -31,23 +32,7 @@ public class UserAppService {
 
     @Transactional(readOnly = true)
     public ResponsePayload<UserDetailsDTO> getUserDetails(String userId) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("Error user", "User with such id not found");
-        }
-
-        UserDetails details = userDetailsRepository.findByUserId(userId);
-        if (details == null) {
-            throw new NotFoundException("Error user details", "User details for this user not found");
-        }
-
-        return of(new UserDetailsDTO(
-                details.getId(),
-                details.getName(),
-                details.getSurname(),
-                details.getCountry(),
-                details.getCity(),
-                user.getUsername()));
+        return getUserDetailsDTOResponsePayload(userId);
     }
 
     @Transactional(readOnly = true)
@@ -64,9 +49,12 @@ public class UserAppService {
 
     @Transactional(readOnly = true)
     public ResponsePayload<UserDetailsDTO> getAuthenticatedUserDetails(UserAuthentication authentication) {
-        User user = userRepository.getUserById(authentication.getId());
-        UserDetails details = userDetailsRepository.findByUserId(authentication.getId());
+        return getUserDetailsDTOResponsePayload(authentication.getId());
+    }
 
+    private ResponsePayload<UserDetailsDTO> getUserDetailsDTOResponsePayload(String userId) {
+        var user = getUserEntity(userId);
+        var details = getUserDetailsEntity(userId);
         return of(new UserDetailsDTO(
                 details.getId(),
                 details.getName(),
@@ -74,5 +62,15 @@ public class UserAppService {
                 details.getCountry(),
                 details.getCity(),
                 user.getUsername()));
+    }
+
+    private User getUserEntity(String userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Error not found", format("User with id %s not found", userId)));
+    }
+
+    private UserDetails getUserDetailsEntity(String userId) {
+        return userDetailsRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException("Error not found", format("User details for user with id %s not found", userId)));
     }
 }
