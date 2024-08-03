@@ -2,21 +2,21 @@ package com.aklimets.pet.application.service.authentication;
 
 
 import com.aklimets.pet.application.annotation.ApplicationService;
-import com.aklimets.pet.application.util.jwt.JwtExtractor;
-import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequestDTO;
-import com.aklimets.pet.domain.dto.request.UserRegistrationRequest;
-import com.aklimets.pet.domain.dto.request.UserRequestDTO;
-import com.aklimets.pet.domain.dto.response.AuthenticationTokensDTO;
+import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
+import com.aklimets.pet.domain.dto.request.RegistrationRequest;
+import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
+import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
 import com.aklimets.pet.domain.exception.BadRequestException;
 import com.aklimets.pet.domain.exception.UnauthorizedException;
 import com.aklimets.pet.domain.model.user.UserFactory;
 import com.aklimets.pet.domain.model.user.userdetails.UserDetailsFactory;
-import com.aklimets.pet.domain.payload.ResponsePayload;
+import com.aklimets.pet.application.envelope.ResponseEnvelope;
 import com.aklimets.pet.domain.service.UserDomainService;
+import com.aklimets.pet.jwt.JwtExtractor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.aklimets.pet.domain.payload.ResponsePayload.of;
+import static com.aklimets.pet.application.envelope.ResponseEnvelope.of;
 
 
 @ApplicationService
@@ -34,7 +34,7 @@ public class AuthenticationAppService {
 
     private final UserFactory factory;
 
-    public ResponsePayload<AuthenticationTokensDTO> authenticate(UserRequestDTO user) {
+    public ResponseEnvelope<AuthenticationTokensResponse> authenticate(AuthenticationRequest user) {
         var userEntity = userDomainService.loadUserByUsername(user.username());
         if (userEntity != null && helper.isPasswordsEqual(user, userEntity) && userEntity.getUsername().equals(user.username())) {
             var tokens = helper.generateUserTokens(userEntity);
@@ -44,7 +44,7 @@ public class AuthenticationAppService {
         throw new UnauthorizedException("Error unauthorized", "Incorrect login or password");
     }
 
-    public ResponsePayload<AuthenticationTokensDTO> refreshTokensPair(JwtRefreshTokenRequestDTO payload) {
+    public ResponseEnvelope<AuthenticationTokensResponse> refreshTokensPair(JwtRefreshTokenRequest payload) {
         var refreshUser = jwtExtractor.extractRefreshJwtUser(payload.refreshToken());
         var userEntity = userDomainService.loadUserByUsernameAndRefreshToken(refreshUser.username(), payload.refreshToken());
         if (userEntity == null) {
@@ -55,7 +55,7 @@ public class AuthenticationAppService {
         return of(tokens);
     }
 
-    public ResponsePayload<AuthenticationTokensDTO> register(UserRegistrationRequest request) {
+    public ResponseEnvelope<AuthenticationTokensResponse> register(RegistrationRequest request) {
         if (userDomainService.existsByUsername(request.username())) {
             throw new BadRequestException("Error exists", "User with current username exists");
         }

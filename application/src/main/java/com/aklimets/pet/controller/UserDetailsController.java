@@ -4,7 +4,7 @@ import com.aklimets.pet.application.service.user.UserAppService;
 import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.user.UserDetailsDTO;
-import com.aklimets.pet.domain.payload.ResponsePayload;
+import com.aklimets.pet.application.envelope.ResponseEnvelope;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import io.swagger.annotations.Api;
@@ -38,14 +38,14 @@ public class UserDetailsController {
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "User details", produces = "application/json")
     @GetMapping("/{userId}")
-    public ResponseEntity<ResponsePayload<UserDetailsDTO>> getUserDetails(@PathVariable("userId") String userId) {
+    public ResponseEntity<ResponseEnvelope<UserDetailsDTO>> getUserDetails(@PathVariable("userId") String userId) {
         return ResponseEntity.ok(userService.getUserDetails(userId));
     }
 
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "User details", produces = "application/json")
     @GetMapping
-    public ResponseEntity<ResponsePayload<UserDetailsDTO>> getAuthenticatedUserDetails(@ApiIgnore UserAuthentication authentication) {
+    public ResponseEntity<ResponseEnvelope<UserDetailsDTO>> getAuthenticatedUserDetails(@ApiIgnore UserAuthentication authentication) {
         return ResponseEntity.ok(userService.getAuthenticatedUserDetails(authentication));
     }
 }

@@ -1,10 +1,8 @@
 package com.aklimets.pet.domain.model.user.userdetails;
 
 
-import com.aklimets.pet.domain.dto.request.UserDetailsRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;

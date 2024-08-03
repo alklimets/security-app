@@ -1,7 +1,7 @@
 package com.aklimets.pet.controller.annotation;
 
-import com.aklimets.pet.domain.payload.ErrorResponsePayload;
-import com.aklimets.pet.domain.payload.ValidationPayload;
+import com.aklimets.pet.application.envelope.ErrorResponseEnvelope;
+import com.aklimets.pet.application.envelope.ValidationEnvelope;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,17 +19,17 @@ import java.lang.annotation.Target;
 @ApiResponses(
         value = {
                 @ApiResponse(responseCode = "400", description = "Bad request",
-                        content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))}),
+                        content = {@Content(schema = @Schema(implementation = ErrorResponseEnvelope.class))}),
                 @ApiResponse(responseCode = "401", description = "Unauthorized",
-                        content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))}),
+                        content = {@Content(schema = @Schema(implementation = ErrorResponseEnvelope.class))}),
                 @ApiResponse(responseCode = "403", description = "Access denied",
-                        content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))}),
+                        content = {@Content(schema = @Schema(implementation = ErrorResponseEnvelope.class))}),
                 @ApiResponse(responseCode = "404", description = "Not found",
-                        content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))}),
+                        content = {@Content(schema = @Schema(implementation = ErrorResponseEnvelope.class))}),
                 @ApiResponse(responseCode = "422", description = "Validation failed",
-                        content = {@Content(schema = @Schema(implementation = ValidationPayload.class))}),
+                        content = {@Content(schema = @Schema(implementation = ValidationEnvelope.class))}),
                 @ApiResponse(responseCode = "500", description = "Internal server error",
-                        content = {@Content(schema = @Schema(implementation = ErrorResponsePayload.class))})
+                        content = {@Content(schema = @Schema(implementation = ErrorResponseEnvelope.class))})
         }
 )
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})

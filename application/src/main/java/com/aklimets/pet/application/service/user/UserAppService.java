@@ -2,21 +2,21 @@ package com.aklimets.pet.application.service.user;
 
 import com.aklimets.pet.application.annotation.ApplicationService;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
-import com.aklimets.pet.domain.dto.response.AuthorizedUserResponseDTO;
+import com.aklimets.pet.domain.dto.response.AuthorizedUserResponse;
 import com.aklimets.pet.domain.dto.user.UserDetailsDTO;
 import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.domain.model.user.userdetails.UserDetails;
 import com.aklimets.pet.domain.model.user.userdetails.UserDetailsRepository;
-import com.aklimets.pet.domain.payload.ResponsePayload;
+import com.aklimets.pet.application.envelope.ResponseEnvelope;
 import com.aklimets.pet.domain.service.UserDomainService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.aklimets.pet.domain.payload.ResponsePayload.of;
+import static com.aklimets.pet.application.envelope.ResponseEnvelope.of;
 import static java.lang.String.format;
 
 @ApplicationService
@@ -31,14 +31,14 @@ public class UserAppService {
     private final UserDomainService userDomainService;
 
     @Transactional(readOnly = true)
-    public ResponsePayload<UserDetailsDTO> getUserDetails(String userId) {
+    public ResponseEnvelope<UserDetailsDTO> getUserDetails(String userId) {
         return getUserDetailsDTOResponsePayload(userId);
     }
 
     @Transactional(readOnly = true)
-    public ResponsePayload<AuthorizedUserResponseDTO> authorize(UserAuthentication authentication) {
+    public ResponseEnvelope<AuthorizedUserResponse> authorize(UserAuthentication authentication) {
         var user = userDomainService.loadUserByUsername(authentication.getUsername());
-        var responseDTO = new AuthorizedUserResponseDTO(
+        var responseDTO = new AuthorizedUserResponse(
                 user.getId(),
                 user.getUsername(),
                 user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
@@ -48,11 +48,11 @@ public class UserAppService {
 
 
     @Transactional(readOnly = true)
-    public ResponsePayload<UserDetailsDTO> getAuthenticatedUserDetails(UserAuthentication authentication) {
+    public ResponseEnvelope<UserDetailsDTO> getAuthenticatedUserDetails(UserAuthentication authentication) {
         return getUserDetailsDTOResponsePayload(authentication.getId());
     }
 
-    private ResponsePayload<UserDetailsDTO> getUserDetailsDTOResponsePayload(String userId) {
+    private ResponseEnvelope<UserDetailsDTO> getUserDetailsDTOResponsePayload(String userId) {
         var user = getUserEntity(userId);
         var details = getUserDetailsEntity(userId);
         return of(new UserDetailsDTO(

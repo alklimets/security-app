@@ -1,6 +1,5 @@
 package com.aklimets.pet.infrasctucture.security;
 
-import com.aklimets.pet.application.util.jwt.JwtExtractor;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.infrasctucture.security.constants.SecurityConstants;
@@ -8,6 +7,7 @@ import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFil
 import com.aklimets.pet.infrasctucture.security.filter.RequestIdFilter;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.infrasctucture.security.provider.JwtAuthenticationProvider;
+import com.aklimets.pet.jwt.JwtExtractor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +20,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Collections;

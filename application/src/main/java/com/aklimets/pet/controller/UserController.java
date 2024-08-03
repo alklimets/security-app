@@ -3,8 +3,8 @@ package com.aklimets.pet.controller;
 import com.aklimets.pet.application.service.user.UserAppService;
 import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
-import com.aklimets.pet.domain.dto.response.AuthorizedUserResponseDTO;
-import com.aklimets.pet.domain.payload.ResponsePayload;
+import com.aklimets.pet.domain.dto.response.AuthorizedUserResponse;
+import com.aklimets.pet.application.envelope.ResponseEnvelope;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import io.swagger.annotations.Api;
@@ -37,7 +37,7 @@ public class UserController {
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "Authorize", produces = "application/json")
     @GetMapping("/authorize")
-    public ResponseEntity<ResponsePayload<AuthorizedUserResponseDTO>> authorize(@ApiIgnore UserAuthentication authentication) {
+    public ResponseEntity<ResponseEnvelope<AuthorizedUserResponse>> authorize(@ApiIgnore UserAuthentication authentication) {
         log.info("Authenticated user: {}", authentication); // by providing class which implements authentication or principal the object will be populated automatically
         return ResponseEntity.ok(userService.authorize(authentication));
     }

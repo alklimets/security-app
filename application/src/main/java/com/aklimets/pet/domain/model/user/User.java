@@ -1,6 +1,7 @@
 package com.aklimets.pet.domain.model.user;
 
 import com.aklimets.pet.domain.attribute.Roles;
+import com.aklimets.pet.model.UsernameAndIdentity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import java.util.Collections;
 @Entity
 @Table(name = "users", schema = "security")
 @AllArgsConstructor
-public class User implements UserDetails {
+public class User implements UserDetails, UsernameAndIdentity {
     @Id
     private String id;
 

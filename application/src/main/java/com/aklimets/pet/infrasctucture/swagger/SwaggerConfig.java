@@ -1,9 +1,9 @@
 package com.aklimets.pet.infrasctucture.swagger;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.aklimets.pet.domain.payload.ErrorResponsePayload;
-import com.aklimets.pet.domain.payload.ResponsePayload;
-import com.aklimets.pet.domain.payload.ValidationPayload;
+import com.aklimets.pet.application.envelope.ErrorResponseEnvelope;
+import com.aklimets.pet.application.envelope.ResponseEnvelope;
+import com.aklimets.pet.application.envelope.ValidationEnvelope;
 import com.aklimets.pet.infrasctucture.security.annotation.NoAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
@@ -37,9 +37,9 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.ant("/api/v1/common/security/**"))
                 .build()
-                .additionalModels(typeResolver.resolve(ErrorResponsePayload.class),
-                        typeResolver.resolve(ResponsePayload.class),
-                        typeResolver.resolve(ValidationPayload.class));
+                .additionalModels(typeResolver.resolve(ErrorResponseEnvelope.class),
+                        typeResolver.resolve(ResponseEnvelope.class),
+                        typeResolver.resolve(ValidationEnvelope.class));
     }
 
     @Bean
@@ -62,9 +62,9 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.ant("/api/v1/common/details/**"))
                 .build()
-                .additionalModels(typeResolver.resolve(ErrorResponsePayload.class),
-                        typeResolver.resolve(ResponsePayload.class),
-                        typeResolver.resolve(ValidationPayload.class));
+                .additionalModels(typeResolver.resolve(ErrorResponseEnvelope.class),
+                        typeResolver.resolve(ResponseEnvelope.class),
+                        typeResolver.resolve(ValidationEnvelope.class));
     }
 
     @Bean
@@ -77,9 +77,9 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.ant("/api/v1/common/user/**"))
                 .build()
-                .additionalModels(typeResolver.resolve(ErrorResponsePayload.class),
-                        typeResolver.resolve(ResponsePayload.class),
-                        typeResolver.resolve(ValidationPayload.class))
+                .additionalModels(typeResolver.resolve(ErrorResponseEnvelope.class),
+                        typeResolver.resolve(ResponseEnvelope.class),
+                        typeResolver.resolve(ValidationEnvelope.class))
                 .securitySchemes(authConfig.getApiKeys())
                 .securityContexts(authConfig.getSecurityContext());
     }

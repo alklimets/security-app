@@ -1,11 +1,11 @@
 package com.aklimets.pet.infrasctucture.security.filter;
 
-import com.aklimets.pet.application.util.jwt.JwtExtractor;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
-import com.aklimets.pet.domain.dto.jwt.JwtUser;
 import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
+import com.aklimets.pet.jwt.JwtExtractor;
+import com.aklimets.pet.model.JwtUser;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

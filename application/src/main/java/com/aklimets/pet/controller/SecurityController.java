@@ -3,11 +3,11 @@ package com.aklimets.pet.controller;
 import com.aklimets.pet.application.service.authentication.AuthenticationAppService;
 import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
-import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequestDTO;
-import com.aklimets.pet.domain.dto.request.UserRegistrationRequest;
-import com.aklimets.pet.domain.dto.request.UserRequestDTO;
-import com.aklimets.pet.domain.dto.response.AuthenticationTokensDTO;
-import com.aklimets.pet.domain.payload.ResponsePayload;
+import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
+import com.aklimets.pet.domain.dto.request.RegistrationRequest;
+import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
+import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
+import com.aklimets.pet.application.envelope.ResponseEnvelope;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
@@ -39,21 +39,21 @@ public class SecurityController {
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "Authenticate", produces = "application/json")
     @PostMapping("/authenticate")
-    public ResponseEntity<ResponsePayload<AuthenticationTokensDTO>> authenticate(@Valid @RequestBody UserRequestDTO user, @ApiIgnore UserAuthentication principal) {
+    public ResponseEntity<ResponseEnvelope<AuthenticationTokensResponse>> authenticate(@Valid @RequestBody AuthenticationRequest user, @ApiIgnore UserAuthentication principal) {
         return ResponseEntity.ok(authenticationService.authenticate(user));
     }
 
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "Refresh tokens pair", produces = "application/json")
     @PostMapping("/refresh")
-    public ResponseEntity<ResponsePayload<AuthenticationTokensDTO>> refreshTokensPair(@Valid @RequestBody JwtRefreshTokenRequestDTO tokens) {
+    public ResponseEntity<ResponseEnvelope<AuthenticationTokensResponse>> refreshTokensPair(@Valid @RequestBody JwtRefreshTokenRequest tokens) {
         return ResponseEntity.ok(authenticationService.refreshTokensPair(tokens));
     }
 
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "New user registration", produces = "application/json")
     @PostMapping("/registration")
-    public ResponseEntity<ResponsePayload<AuthenticationTokensDTO>> register(@Valid @RequestBody UserRegistrationRequest request) {
+    public ResponseEntity<ResponseEnvelope<AuthenticationTokensResponse>> register(@Valid @RequestBody RegistrationRequest request) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 }
