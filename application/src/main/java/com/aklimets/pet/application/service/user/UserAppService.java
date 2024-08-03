@@ -1,6 +1,6 @@
 package com.aklimets.pet.application.service.user;
 
-import com.aklimets.pet.application.annotation.ApplicationService;
+import com.aklimets.pet.buildingblock.anotations.ApplicationService;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.response.AuthorizedUserResponse;
 import com.aklimets.pet.domain.dto.user.UserDetailsDTO;

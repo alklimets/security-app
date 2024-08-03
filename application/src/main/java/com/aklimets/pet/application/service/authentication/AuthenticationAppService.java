@@ -1,8 +1,8 @@
 package com.aklimets.pet.application.service.authentication;
 
 
-import com.aklimets.pet.application.annotation.ApplicationService;
 import com.aklimets.pet.application.envelope.ResponseEnvelope;
+import com.aklimets.pet.buildingblock.anotations.ApplicationService;
 import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;

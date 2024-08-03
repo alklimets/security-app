@@ -1,7 +1,7 @@
 package com.aklimets.pet.domain.model.user;
 
+import com.aklimets.pet.buildingblock.interfaces.UsernameAndIdentity;
 import com.aklimets.pet.domain.attribute.Roles;
-import com.aklimets.pet.model.interfaces.UsernameAndIdentity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
