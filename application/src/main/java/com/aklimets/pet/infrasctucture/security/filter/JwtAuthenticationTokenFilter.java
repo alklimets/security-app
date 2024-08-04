@@ -51,7 +51,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
                 // all urls which should be authenticated should be listed here, because if not then the auth context
                 // will be null and spring security will return 401 because of missing authentication
                 new AntPathRequestMatcher("/api/v1/common/user/**"),
-                new AntPathRequestMatcher("/api/v1/common/details/**"))
+                new AntPathRequestMatcher("/api/v1/common/profile/**"))
         );
         setAuthenticationManager(authenticationManager);
         setAuthenticationSuccessHandler(jwtSuccessHandler);
@@ -102,7 +102,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     }
 
     private UserAuthentication createUserAuthentication(JwtUser jwtUser) {
-        var user = userRepository.findById((UserIdNumber) jwtUser.id())
+        var user = userRepository.findById( new UserIdNumber(jwtUser.id().getValue()))
                 .orElseThrow(() -> new NotFoundException("Error not found", format("User with id %s not found", jwtUser.id())));
         return new UserAuthentication(user.getId(), user.getUsername(), List.of(new SimpleGrantedAuthority(user.getRole().name())));
     }

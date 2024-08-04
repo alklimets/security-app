@@ -21,32 +21,32 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping("/api/v1/common/details") // api versioning included
+@RequestMapping("/api/v1/common/profile") // api versioning included
 @SwaggerDefinition(consumes = "application/json", produces = "application/json")
-@Api(tags = "Details API", value = "API to work with security")
+@Api(tags = "Profile API", value = "API to work with security")
 @WithBasicAuth
 @WithJwtAuth
 @Slf4j
-public class UserDetailsController {
+public class UserProfileController {
 
     private final UserAppService userService;
 
     @Autowired
-    public UserDetailsController(UserAppService userService) {
+    public UserProfileController(UserAppService userService) {
         this.userService = userService;
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "User details", produces = "application/json")
+    @ApiOperation(value = "User profile", produces = "application/json")
     @GetMapping("/{userId}")
-    public ResponseEntity<ResponseEnvelope<UserProfileDTO>> getUserDetails(@PathVariable("userId") UserIdNumber userId) {
-        return ResponseEntity.ok(userService.getUserDetails(userId));
+    public ResponseEntity<ResponseEnvelope<UserProfileDTO>> getUserProfile(@PathVariable("userId") UserIdNumber userId) {
+        return ResponseEntity.ok(userService.getUserProfile(userId));
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "User details", produces = "application/json")
+    @ApiOperation(value = "User profile", produces = "application/json")
     @GetMapping
-    public ResponseEntity<ResponseEnvelope<UserProfileDTO>> getAuthenticatedUserDetails(@ApiIgnore UserAuthentication authentication) {
-        return ResponseEntity.ok(userService.getAuthenticatedUserDetails(authentication));
+    public ResponseEntity<ResponseEnvelope<UserProfileDTO>> getAuthenticatedUserProfile(@ApiIgnore UserAuthentication authentication) {
+        return ResponseEntity.ok(userService.getAuthenticatedUserProfile(authentication));
     }
 }

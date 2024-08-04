@@ -57,10 +57,10 @@ public class SwaggerConfig {
 
     private Docket getProfileApiDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("User Details API")
+                .groupName("User Profile API")
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/api/v1/common/details/**"))
+                .paths(PathSelectors.ant("/api/v1/common/profile/**"))
                 .build()
                 .additionalModels(typeResolver.resolve(ErrorResponseEnvelope.class),
                         typeResolver.resolve(ResponseEnvelope.class),

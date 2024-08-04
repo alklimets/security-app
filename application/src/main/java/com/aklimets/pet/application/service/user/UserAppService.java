@@ -28,14 +28,9 @@ public class UserAppService {
 
     private final UserRepository userRepository;
 
-    private final UserProfileRepository userDetailsRepository;
+    private final UserProfileRepository userProfileRepository;
 
     private final UserDomainService userDomainService;
-
-    @Transactional(readOnly = true)
-    public ResponseEnvelope<UserProfileDTO> getUserDetails(UserIdNumber userId) {
-        return getUserDetailsDTOResponsePayload(userId);
-    }
 
     @Transactional(readOnly = true)
     public ResponseEnvelope<AuthorizedUserResponse> authorize(UserAuthentication authentication) {
@@ -49,15 +44,19 @@ public class UserAppService {
         return of(responseDTO);
     }
 
-
     @Transactional(readOnly = true)
-    public ResponseEnvelope<UserProfileDTO> getAuthenticatedUserDetails(UserAuthentication authentication) {
-        return getUserDetailsDTOResponsePayload(authentication.getId());
+    public ResponseEnvelope<UserProfileDTO> getUserProfile(UserIdNumber userId) {
+        return getUserProfileDTOResponsePayload(userId);
     }
 
-    private ResponseEnvelope<UserProfileDTO> getUserDetailsDTOResponsePayload(UserIdNumber userId) {
+    @Transactional(readOnly = true)
+    public ResponseEnvelope<UserProfileDTO> getAuthenticatedUserProfile(UserAuthentication authentication) {
+        return getUserProfileDTOResponsePayload(authentication.getId());
+    }
+
+    private ResponseEnvelope<UserProfileDTO> getUserProfileDTOResponsePayload(UserIdNumber userId) {
         var user = getUserEntity(userId);
-        var details = getUserDetailsEntity(userId);
+        var details = getUserProfileEntity(userId);
         return of(new UserProfileDTO(
                 details.getId(),
                 details.getName(),
@@ -72,8 +71,8 @@ public class UserAppService {
                 .orElseThrow(() -> new NotFoundException("Error not found", format("User with id %s not found", userId)));
     }
 
-    private UserProfile getUserDetailsEntity(UserIdNumber userId) {
-        return userDetailsRepository.findByUserId(userId)
+    private UserProfile getUserProfileEntity(UserIdNumber userId) {
+        return userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException("Error not found", format("User details for user with id %s not found", userId)));
     }
 }

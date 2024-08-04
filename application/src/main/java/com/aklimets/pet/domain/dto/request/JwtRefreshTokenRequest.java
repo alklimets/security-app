@@ -5,5 +5,6 @@ import com.aklimets.pet.model.security.RefreshToken;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public record JwtRefreshTokenRequest(@Valid @NotNull(message = "Refresh token cannot be null") RefreshToken refreshToken) {
+public record JwtRefreshTokenRequest(
+        @Valid @NotNull(message = "Refresh token cannot be null") RefreshToken refreshToken) {
 }

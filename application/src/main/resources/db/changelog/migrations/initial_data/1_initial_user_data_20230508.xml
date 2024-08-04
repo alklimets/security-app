@@ -29,12 +29,16 @@
             <column name="user_id" value="842aaa2e-7788-4ecb-b441-7c13rt30b8bf"/>
             <column name="name" value="Aliaksandr"/>
             <column name="surname" value="Klimets"/>
+            <column name="country" value="Poland"/>
+            <column name="city" value="Kraków"/>
         </insert>
         <insert tableName="user_profile" schemaName="security">
             <column name="id" value="842bbaae-7788-4ecb-b441-7c7er45ee8bf"/>
             <column name="user_id" value="842aaaae-7788-4ecb-b441-7c7er450b8bf"/>
             <column name="name" value="Piotr"/>
             <column name="surname" value="Piotrenko"/>
+            <column name="country" value="Poland"/>
+            <column name="city" value="Kraków"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

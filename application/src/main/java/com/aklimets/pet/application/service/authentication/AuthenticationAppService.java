@@ -34,7 +34,7 @@ public class AuthenticationAppService {
 
     private final JwtExtractor jwtExtractor;
 
-    private final UserProfileFactory userDetailsFactory;
+    private final UserProfileFactory userProfileFactory;
 
     private final UserFactory factory;
 
@@ -67,12 +67,12 @@ public class AuthenticationAppService {
             throw new BadRequestException("Error exists", "User with current email exists");
         }
         var user = factory.create(request);
-        var details = userDetailsFactory.create(request.details(), user.getId());
+        var details = userProfileFactory.create(request.details(), user.getId());
         var tokens = helper.generateUserTokens(user);
         user.updateRefreshToken(tokens.refreshToken());
 
         userDomainService.saveUser(user);
-        userDomainService.saveUserDetails(details);
+        userDomainService.saveUserProfile(details);
         return of(tokens);
     }
 }

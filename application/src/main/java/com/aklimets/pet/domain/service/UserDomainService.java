@@ -21,7 +21,7 @@ public class UserDomainService {
 
     private final UserRepository userRepository;
 
-    private final UserProfileRepository userDetailsRepository;
+    private final UserProfileRepository userProfileRepository;
 
     @Transactional(readOnly = true)
     public Optional<User> loadUserByUsername(Username username) {
@@ -54,7 +54,7 @@ public class UserDomainService {
     }
 
     @Transactional
-    public void saveUserDetails(UserProfile userDetails) {
-        userDetailsRepository.save(userDetails);
+    public void saveUserProfile(UserProfile userProfile) {
+        userProfileRepository.save(userProfile);
     }
 }

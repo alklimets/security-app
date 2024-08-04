@@ -8,8 +8,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public record RegistrationRequest(
-    @Valid @NotNull(message = "Username could not be null") Username username,
-    @Valid @NotNull(message = "Email could not be null") EmailAddress email,
-    @Valid @NotNull(message = "Password could not be null") Password password,
-    @Valid @NotNull(message = "Details could not be null") UserDetailsRequest details ) {
+        @Valid @NotNull(message = "Username could not be null") Username username,
+        @Valid @NotNull(message = "Email could not be null") EmailAddress email,
+        @Valid @NotNull(message = "Password could not be null") Password password,
+        @Valid @NotNull(message = "Profile could not be null") UserProfileRequest details) {
 }
