@@ -3,14 +3,17 @@ package com.aklimets.pet.infrasctucture.security.filter;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.user.UserRepository;
+import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.model.jwt.JwtUser;
+import com.aklimets.pet.model.security.AccessToken;
 import com.aklimets.pet.util.jwt.JwtExtractor;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -20,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -85,8 +89,8 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         return request.getHeader(authorizationHeader);
     }
 
-    private String extractTokenValue(String accessToken) {
-        return accessToken.substring(accessPrefix.length() + 1);
+    private AccessToken extractTokenValue(String accessToken) {
+        return new AccessToken(accessToken.substring(accessPrefix.length() + 1));
     }
 
     private void sendUnauthorizedError(HttpServletResponse response) throws IOException {
@@ -98,8 +102,8 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     }
 
     private UserAuthentication createUserAuthentication(JwtUser jwtUser) {
-        var user = userRepository.findById(jwtUser.id())
+        var user = userRepository.findById((UserIdNumber) jwtUser.id())
                 .orElseThrow(() -> new NotFoundException("Error not found", format("User with id %s not found", jwtUser.id())));
-        return new UserAuthentication(user.getId(), user.getUsername(), user.getAuthorities());
+        return new UserAuthentication(user.getId(), user.getUsername(), List.of(new SimpleGrantedAuthority(user.getRole().name())));
     }
 }

@@ -1,8 +1,9 @@
 package com.aklimets.pet.domain.model.user;
 
 import com.aklimets.pet.application.util.PasswordEncoder;
-import com.aklimets.pet.domain.attribute.Roles;
+import com.aklimets.pet.domain.model.user.attribute.Role;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
+import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,12 @@ public class UserFactory {
 
     public User create(RegistrationRequest userRequestDTO) {
         return new User(
-                UUID.randomUUID().toString(),
+                UserIdNumber.generate(),
                 userRequestDTO.username(),
+                userRequestDTO.email(),
                 passwordEncoder.encode(userRequestDTO.password()),
                 null,
-                Roles.USER
+                Role.USER
         );
     }
 }

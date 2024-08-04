@@ -1,13 +1,23 @@
 package com.aklimets.pet.domain.model.user;
 
 
+import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
+import com.aklimets.pet.model.security.EmailAddress;
+import com.aklimets.pet.model.security.RefreshToken;
+import com.aklimets.pet.model.security.Username;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, String> {
+import java.util.Optional;
 
-    User findUserByUsername(String username);
+public interface UserRepository extends JpaRepository<User, UserIdNumber> {
 
-    User findUserByUsernameAndRefreshToken(String username, String refreshToken);
+    Optional<User> getUserByUsernameOrEmail(Username username, EmailAddress email);
 
-    boolean existsByUsername(String username);
+    Optional<User> getUserByUsername(Username username);
+
+    Optional<User> getUserByUsernameAndRefreshToken(Username username, RefreshToken refreshToken);
+
+    boolean existsByUsername(Username username);
+
+    boolean existsByEmail(EmailAddress email);
 }

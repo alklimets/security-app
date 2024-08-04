@@ -1,8 +1,12 @@
 package com.aklimets.pet.domain.dto.request;
 
-import javax.validation.constraints.NotBlank;
+import com.aklimets.pet.model.security.Password;
+import com.aklimets.pet.model.security.Username;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public record AuthenticationRequest(
-    @NotBlank(message = "Username cannot be blank") String username,
-    @NotBlank(message = "Password cannot be blank") String password){
+    @Valid @NotNull(message = "Username cannot be null") Username username,
+    @Valid @NotNull(message = "Password cannot be null") Password password){
 }

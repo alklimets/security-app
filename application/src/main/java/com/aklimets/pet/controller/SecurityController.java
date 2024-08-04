@@ -39,7 +39,7 @@ public class SecurityController {
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "Authenticate", produces = "application/json")
     @PostMapping("/authenticate")
-    public ResponseEntity<ResponseEnvelope<AuthenticationTokensResponse>> authenticate(@Valid @RequestBody AuthenticationRequest user, @ApiIgnore UserAuthentication principal) {
+    public ResponseEntity<ResponseEnvelope<AuthenticationTokensResponse>> authenticate(@Valid @RequestBody AuthenticationRequest user) {
         return ResponseEntity.ok(authenticationService.authenticate(user));
     }
 

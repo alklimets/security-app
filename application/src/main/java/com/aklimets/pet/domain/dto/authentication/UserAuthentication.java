@@ -1,5 +1,7 @@
 package com.aklimets.pet.domain.dto.authentication;
 
+import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
+import com.aklimets.pet.model.security.Username;
 import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,15 +12,15 @@ import java.util.Collection;
 @Getter
 public final class UserAuthentication implements Authentication {
 
-    private final String id;
+    private final UserIdNumber id;
 
-    private final String username;
+    private final Username username;
 
     private final Collection<? extends GrantedAuthority> authorities;
 
     private boolean authenticated;
 
-    public UserAuthentication(String id, String username, Collection<? extends GrantedAuthority> authorities) {
+    public UserAuthentication(UserIdNumber id, Username username, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.authorities = authorities;

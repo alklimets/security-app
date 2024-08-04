@@ -4,6 +4,7 @@ import com.aklimets.pet.domain.exception.*;
 import com.aklimets.pet.application.envelope.ErrorResponseEnvelope;
 import com.aklimets.pet.application.envelope.ValidationEnvelope;
 import io.jsonwebtoken.JwtException;
+import liquibase.pro.packaged.E;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
@@ -49,6 +50,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     private ResponseEntity<ValidationEnvelope> handleException(MethodArgumentNotValidException exception) {
+        logException(exception);
         List<String> payload = exception
                 .getBindingResult()
                 .getAllErrors()
@@ -60,13 +62,19 @@ public class CustomExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    private ResponseEntity<ErrorResponseEnvelope> handleException(Exception e) {
+    private ResponseEntity<ErrorResponseEnvelope> handleException(Exception exception) {
+        logException(exception);
         return ResponseEntity.status(500)
-                .body(new ErrorResponseEnvelope("Internal server error", e.getMessage()));
+                .body(new ErrorResponseEnvelope("Internal server error", exception.getMessage()));
     }
 
-    private ResponseEntity<ErrorResponseEnvelope> withStatus(int status, DefaultDomainRuntimeException e) {
+    private ResponseEntity<ErrorResponseEnvelope> withStatus(int status, DefaultDomainRuntimeException exception) {
+        logException(exception);
         return ResponseEntity.status(status)
-                .body(new ErrorResponseEnvelope(e.getErrorCode(), e.getErrorMessage()));
+                .body(new ErrorResponseEnvelope(exception.getErrorCode(), exception.getErrorMessage()));
+    }
+
+    private static void logException(Exception exception) {
+        log.error("Exception occurred: {}", exception.getMessage());
     }
 }

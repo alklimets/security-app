@@ -12,23 +12,25 @@
         <insert tableName="users" schemaName="security">
             <column name="id" value="842aaa2e-7788-4ecb-b441-7c13rt30b8bf"/>
             <column name="username" value="admin"/>
+            <column name="email" value="aliaksandrklimets@gmail.com"/>
             <column name="password" value="240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"/>
             <column name="role" value="ADMIN"/>
         </insert>
         <insert tableName="users" schemaName="security">
             <column name="id" value="842aaaae-7788-4ecb-b441-7c7er450b8bf"/>
             <column name="username" value="admin1"/>
+            <column name="email" value="testemail@gmail.com"/>
             <column name="password" value="240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"/>
             <column name="role" value="USER"/>
         </insert>
 
-        <insert tableName="user_details" schemaName="security">
+        <insert tableName="user_profile" schemaName="security">
             <column name="id" value="842aaaae-7788-444b-b441-7c7er45077bf"/>
             <column name="user_id" value="842aaa2e-7788-4ecb-b441-7c13rt30b8bf"/>
             <column name="name" value="Aliaksandr"/>
             <column name="surname" value="Klimets"/>
         </insert>
-        <insert tableName="user_details" schemaName="security">
+        <insert tableName="user_profile" schemaName="security">
             <column name="id" value="842bbaae-7788-4ecb-b441-7c7er45ee8bf"/>
             <column name="user_id" value="842aaaae-7788-4ecb-b441-7c7er450b8bf"/>
             <column name="name" value="Piotr"/>

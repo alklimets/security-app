@@ -1,6 +1,9 @@
 package com.aklimets.pet.domain.dto.request;
 
-import javax.validation.constraints.NotBlank;
+import com.aklimets.pet.model.security.RefreshToken;
 
-public record JwtRefreshTokenRequest(@NotBlank(message = "Refresh token cannot be blank") String refreshToken) {
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+public record JwtRefreshTokenRequest(@Valid @NotNull(message = "Refresh token cannot be null") RefreshToken refreshToken) {
 }

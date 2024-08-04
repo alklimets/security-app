@@ -8,15 +8,19 @@ import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
 import com.aklimets.pet.domain.exception.BadRequestException;
+import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.exception.UnauthorizedException;
 import com.aklimets.pet.domain.model.user.UserFactory;
-import com.aklimets.pet.domain.model.user.userdetails.UserDetailsFactory;
+import com.aklimets.pet.domain.model.userprofile.UserProfileFactory;
 import com.aklimets.pet.domain.service.UserDomainService;
+import com.aklimets.pet.model.security.EmailAddress;
+import com.aklimets.pet.model.security.Username;
 import com.aklimets.pet.util.jwt.JwtExtractor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.aklimets.pet.application.envelope.ResponseEnvelope.of;
+import static java.lang.String.format;
 
 
 @ApplicationService
@@ -30,13 +34,14 @@ public class AuthenticationAppService {
 
     private final JwtExtractor jwtExtractor;
 
-    private final UserDetailsFactory userDetailsFactory;
+    private final UserProfileFactory userDetailsFactory;
 
     private final UserFactory factory;
 
     public ResponseEnvelope<AuthenticationTokensResponse> authenticate(AuthenticationRequest user) {
-        var userEntity = userDomainService.loadUserByUsername(user.username());
-        if (userEntity != null && helper.isPasswordsEqual(user, userEntity) && userEntity.getUsername().equals(user.username())) {
+        var userEntity = userDomainService.loadUserByUsernameOrEmail(user.username(), new EmailAddress(user.username().getValue()))
+                .orElseThrow(() -> new NotFoundException("Error not found", format("User with username or email %s not found", user.username().getValue())));;
+        if (helper.isPasswordsEqual(user, userEntity)) {
             var tokens = helper.generateUserTokens(userEntity);
             userEntity.updateRefreshToken(tokens.refreshToken());
             return of(tokens);
@@ -46,10 +51,9 @@ public class AuthenticationAppService {
 
     public ResponseEnvelope<AuthenticationTokensResponse> refreshTokensPair(JwtRefreshTokenRequest payload) {
         var refreshUser = jwtExtractor.extractRefreshJwtUser(payload.refreshToken());
-        var userEntity = userDomainService.loadUserByUsernameAndRefreshToken(refreshUser.username(), payload.refreshToken());
-        if (userEntity == null) {
-            throw new BadRequestException("Bad request", "Refresh token is invalid");
-        }
+        var userEntity = userDomainService.loadUserByUsernameAndRefreshToken((Username) refreshUser.username(), payload.refreshToken())
+                .orElseThrow(() -> new NotFoundException("Error not found", "No user information were found for provided claims"));
+
         var tokens = helper.generateUserTokens(userEntity);
         userEntity.updateRefreshToken(tokens.refreshToken());
         return of(tokens);
@@ -58,6 +62,9 @@ public class AuthenticationAppService {
     public ResponseEnvelope<AuthenticationTokensResponse> register(RegistrationRequest request) {
         if (userDomainService.existsByUsername(request.username())) {
             throw new BadRequestException("Error exists", "User with current username exists");
+        }
+        if (userDomainService.existsByEmail(request.email())) {
+            throw new BadRequestException("Error exists", "User with current email exists");
         }
         var user = factory.create(request);
         var details = userDetailsFactory.create(request.details(), user.getId());

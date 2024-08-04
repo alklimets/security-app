@@ -1,78 +1,48 @@
 package com.aklimets.pet.domain.model.user;
 
 import com.aklimets.pet.buildingblock.interfaces.UsernameAndIdentity;
-import com.aklimets.pet.domain.attribute.Roles;
+import com.aklimets.pet.domain.model.user.attribute.Role;
+import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
+import com.aklimets.pet.model.security.EmailAddress;
+import com.aklimets.pet.model.security.Password;
+import com.aklimets.pet.model.security.RefreshToken;
+import com.aklimets.pet.model.security.Username;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Aggregate root
  */
 @Getter
-@Setter
 @Entity
 @Table(name = "users", schema = "security")
 @AllArgsConstructor
-public class User implements UserDetails, UsernameAndIdentity {
-    @Id
-    private String id;
+public class User implements UsernameAndIdentity {
 
-    private String username;
+    @EmbeddedId
+    private UserIdNumber id;
 
-    private String password;
+    @AttributeOverride(name = "value", column = @Column(name = "username"))
+    private Username username;
 
-    private String refreshToken;
+    @AttributeOverride(name = "value", column = @Column(name = "email"))
+    private EmailAddress email;
+
+    @AttributeOverride(name = "value", column = @Column(name = "password"))
+    private Password password;
+
+    @AttributeOverride(name = "value", column = @Column(name = "refresh_token"))
+    private RefreshToken refreshToken;
 
     @Enumerated(EnumType.STRING)
-    private Roles role;
+    private Role role;
 
     protected User() {
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    public void updateRefreshToken(String refreshToken) {
+    public void updateRefreshToken(RefreshToken refreshToken) {
         this.refreshToken = refreshToken;
     }
 }
