@@ -3,7 +3,7 @@ package com.aklimets.pet.application.service.user;
 import com.aklimets.pet.buildingblock.anotations.ApplicationService;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.response.AuthorizedUserResponse;
-import com.aklimets.pet.domain.dto.userprofile.UserProfileDTO;
+import com.aklimets.pet.domain.dto.response.UserProfileResponse;
 import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.user.UserRepository;
@@ -42,19 +42,19 @@ public class UserAppService {
     }
 
     @Transactional(readOnly = true)
-    public UserProfileDTO getUserProfile(UserIdNumber userId) {
+    public UserProfileResponse getUserProfile(UserIdNumber userId) {
         return getUserProfileDTOResponsePayload(userId);
     }
 
     @Transactional(readOnly = true)
-    public UserProfileDTO getAuthenticatedUserProfile(UserAuthentication authentication) {
+    public UserProfileResponse getAuthenticatedUserProfile(UserAuthentication authentication) {
         return getUserProfileDTOResponsePayload(authentication.getId());
     }
 
-    private UserProfileDTO getUserProfileDTOResponsePayload(UserIdNumber userId) {
+    private UserProfileResponse getUserProfileDTOResponsePayload(UserIdNumber userId) {
         var user = getUserEntity(userId);
         var details = getUserProfileEntity(userId);
-        return new UserProfileDTO(
+        return new UserProfileResponse(
                 details.getId(),
                 details.getName(),
                 details.getSurname(),

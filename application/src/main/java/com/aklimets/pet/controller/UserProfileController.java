@@ -3,7 +3,7 @@ package com.aklimets.pet.controller;
 import com.aklimets.pet.application.service.user.UserAppService;
 import com.aklimets.pet.buildingblock.anotations.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
-import com.aklimets.pet.domain.dto.userprofile.UserProfileDTO;
+import com.aklimets.pet.domain.dto.response.UserProfileResponse;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
@@ -37,14 +37,14 @@ public class UserProfileController {
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "User profile", produces = "application/json")
     @GetMapping("/{userId}")
-    public UserProfileDTO getUserProfile(@PathVariable("userId") UserIdNumber userId) {
+    public UserProfileResponse getUserProfile(@PathVariable("userId") UserIdNumber userId) {
         return userService.getUserProfile(userId);
     }
 
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "User profile", produces = "application/json")
     @GetMapping
-    public UserProfileDTO getAuthenticatedUserProfile(@ApiIgnore UserAuthentication authentication) {
+    public UserProfileResponse getAuthenticatedUserProfile(@ApiIgnore UserAuthentication authentication) {
         return userService.getAuthenticatedUserProfile(authentication);
     }
 }

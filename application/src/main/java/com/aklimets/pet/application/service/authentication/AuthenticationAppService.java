@@ -36,10 +36,13 @@ public class AuthenticationAppService {
 
     private final UserFactory factory;
 
+    private final AuthenticationHistoryService authenticationHistoryService;
+
     public AuthenticationTokensResponse authenticate(AuthenticationRequest user) {
         var userEntity = userDomainService.loadUserByUsernameOrEmail(user.username(), new EmailAddress(user.username().getValue()))
                 .orElseThrow(() -> new NotFoundException("Error not found", format("User with username or email %s not found", user.username().getValue())));;
         if (helper.isPasswordsEqual(user, userEntity)) {
+            authenticationHistoryService.handleAuthentication(userEntity);
             var tokens = helper.generateUserTokens(userEntity);
             userEntity.updateRefreshToken(tokens.refreshToken());
             return tokens;
@@ -71,6 +74,7 @@ public class AuthenticationAppService {
 
         userDomainService.saveUser(user);
         userDomainService.saveUserProfile(details);
+        authenticationHistoryService.handleRegistration(user);
         return tokens;
     }
 }

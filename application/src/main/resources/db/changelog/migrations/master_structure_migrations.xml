@@ -9,4 +9,5 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <include file="db/changelog/migrations/structure/1_create_user_structure_20230508.xml"/>
+    <include file="db/changelog/migrations/structure/2_create_auth_history_20240804.xml"/>
 </databaseChangeLog>

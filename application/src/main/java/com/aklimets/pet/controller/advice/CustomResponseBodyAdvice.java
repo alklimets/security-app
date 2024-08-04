@@ -1,5 +1,6 @@
 package com.aklimets.pet.controller.advice;
 
+import com.aklimets.pet.buildingblock.interfaces.ResponseData;
 import com.aklimets.pet.model.envelope.MetaInformation;
 import com.aklimets.pet.model.envelope.ResponseEnvelope;
 import com.aklimets.pet.util.datetime.TimeSource;
@@ -26,7 +27,7 @@ public class CustomResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return true;
+        return ResponseData.class.isAssignableFrom(returnType.getParameterType());
     }
 
     @Override

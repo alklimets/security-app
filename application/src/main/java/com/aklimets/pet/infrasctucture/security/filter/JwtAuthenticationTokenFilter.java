@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -76,6 +77,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
             log.warn("Error during jwt verification: {}", e.getMessage());
             sendUnauthorizedError(response);
         }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
     }
 
