@@ -1,7 +1,6 @@
 package com.aklimets.pet.application.service.authentication;
 
 
-import com.aklimets.pet.application.envelope.ResponseEnvelope;
 import com.aklimets.pet.buildingblock.anotations.ApplicationService;
 import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
@@ -13,13 +12,14 @@ import com.aklimets.pet.domain.exception.UnauthorizedException;
 import com.aklimets.pet.domain.model.user.UserFactory;
 import com.aklimets.pet.domain.model.userprofile.UserProfileFactory;
 import com.aklimets.pet.domain.service.UserDomainService;
+import com.aklimets.pet.model.envelope.ResponseEnvelope;
 import com.aklimets.pet.model.security.EmailAddress;
 import com.aklimets.pet.model.security.Username;
 import com.aklimets.pet.util.jwt.JwtExtractor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.aklimets.pet.application.envelope.ResponseEnvelope.of;
+import static com.aklimets.pet.model.envelope.ResponseEnvelope.of;
 import static java.lang.String.format;
 
 

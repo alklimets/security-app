@@ -1,12 +1,12 @@
 package com.aklimets.pet.infrasctucture.swagger;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.aklimets.pet.application.envelope.ErrorResponseEnvelope;
-import com.aklimets.pet.application.envelope.ResponseEnvelope;
-import com.aklimets.pet.application.envelope.ValidationEnvelope;
 import com.aklimets.pet.infrasctucture.security.annotation.NoAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
+import com.aklimets.pet.model.envelope.ErrorResponseEnvelope;
+import com.aklimets.pet.model.envelope.ResponseEnvelope;
+import com.aklimets.pet.model.envelope.ValidationEnvelope;
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

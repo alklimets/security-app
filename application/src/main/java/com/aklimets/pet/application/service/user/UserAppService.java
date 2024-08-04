@@ -1,6 +1,5 @@
 package com.aklimets.pet.application.service.user;
 
-import com.aklimets.pet.application.envelope.ResponseEnvelope;
 import com.aklimets.pet.buildingblock.anotations.ApplicationService;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.response.AuthorizedUserResponse;
@@ -12,13 +11,14 @@ import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.domain.model.userprofile.UserProfile;
 import com.aklimets.pet.domain.model.userprofile.UserProfileRepository;
 import com.aklimets.pet.domain.service.UserDomainService;
+import com.aklimets.pet.model.envelope.ResponseEnvelope;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.aklimets.pet.application.envelope.ResponseEnvelope.of;
+import static com.aklimets.pet.model.envelope.ResponseEnvelope.of;
 import static java.lang.String.format;
 
 @ApplicationService

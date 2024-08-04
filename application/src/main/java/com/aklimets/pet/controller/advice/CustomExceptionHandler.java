@@ -1,10 +1,9 @@
 package com.aklimets.pet.controller.advice;
 
 import com.aklimets.pet.domain.exception.*;
-import com.aklimets.pet.application.envelope.ErrorResponseEnvelope;
-import com.aklimets.pet.application.envelope.ValidationEnvelope;
+import com.aklimets.pet.model.envelope.ErrorResponseEnvelope;
+import com.aklimets.pet.model.envelope.ValidationEnvelope;
 import io.jsonwebtoken.JwtException;
-import liquibase.pro.packaged.E;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;

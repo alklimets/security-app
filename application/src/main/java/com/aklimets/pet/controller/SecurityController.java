@@ -1,13 +1,12 @@
 package com.aklimets.pet.controller;
 
 import com.aklimets.pet.application.service.authentication.AuthenticationAppService;
-import com.aklimets.pet.controller.annotation.DefaultSwaggerEndpoint;
-import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
+import com.aklimets.pet.buildingblock.anotations.DefaultSwaggerEndpoint;
+import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
-import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
-import com.aklimets.pet.application.envelope.ResponseEnvelope;
+import com.aklimets.pet.model.envelope.ResponseEnvelope;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
