@@ -11,14 +11,12 @@ import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.domain.model.userprofile.UserProfile;
 import com.aklimets.pet.domain.model.userprofile.UserProfileRepository;
 import com.aklimets.pet.domain.service.UserDomainService;
-import com.aklimets.pet.model.envelope.ResponseEnvelope;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.aklimets.pet.model.envelope.ResponseEnvelope.of;
 import static java.lang.String.format;
 
 @ApplicationService
@@ -33,37 +31,36 @@ public class UserAppService {
     private final UserDomainService userDomainService;
 
     @Transactional(readOnly = true)
-    public ResponseEnvelope<AuthorizedUserResponse> authorize(UserAuthentication authentication) {
+    public AuthorizedUserResponse authorize(UserAuthentication authentication) {
         var user = userDomainService.loadUserByUsername(authentication.getUsername())
                 .orElseThrow(() -> new NotFoundException("Error not found", format("User with username %s not found", authentication.getUsername().getValue())));
-        var responseDTO = new AuthorizedUserResponse(
+        return new AuthorizedUserResponse(
                 user.getId(),
                 user.getUsername(),
                 List.of(user.getRole().name())
         );
-        return of(responseDTO);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEnvelope<UserProfileDTO> getUserProfile(UserIdNumber userId) {
+    public UserProfileDTO getUserProfile(UserIdNumber userId) {
         return getUserProfileDTOResponsePayload(userId);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEnvelope<UserProfileDTO> getAuthenticatedUserProfile(UserAuthentication authentication) {
+    public UserProfileDTO getAuthenticatedUserProfile(UserAuthentication authentication) {
         return getUserProfileDTOResponsePayload(authentication.getId());
     }
 
-    private ResponseEnvelope<UserProfileDTO> getUserProfileDTOResponsePayload(UserIdNumber userId) {
+    private UserProfileDTO getUserProfileDTOResponsePayload(UserIdNumber userId) {
         var user = getUserEntity(userId);
         var details = getUserProfileEntity(userId);
-        return of(new UserProfileDTO(
+        return new UserProfileDTO(
                 details.getId(),
                 details.getName(),
                 details.getSurname(),
                 details.getAddress().getCountry(),
                 details.getAddress().getCity(),
-                user.getUsername()));
+                user.getUsername());
     }
 
     private User getUserEntity(UserIdNumber userId) {
