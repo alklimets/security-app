@@ -1,4 +1,4 @@
-package com.aklimets.pet.adapter.advice;
+package com.aklimets.pet.adapter.controller.advice;
 
 import com.aklimets.pet.buildingblock.interfaces.ResponseData;
 import com.aklimets.pet.model.envelope.MetaInformation;
