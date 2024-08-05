@@ -1,4 +1,4 @@
-package com.aklimets.pet.controller;
+package com.aklimets.pet.adapter;
 
 import com.aklimets.pet.application.service.user.UserAppService;
 import com.aklimets.pet.buildingblock.anotations.DefaultSwaggerEndpoint;

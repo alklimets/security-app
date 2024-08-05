@@ -1,4 +1,4 @@
-package com.aklimets.pet.controller.advice;
+package com.aklimets.pet.adapter.advice;
 
 import com.aklimets.pet.domain.exception.*;
 import com.aklimets.pet.model.envelope.ErrorResponseEnvelope;
