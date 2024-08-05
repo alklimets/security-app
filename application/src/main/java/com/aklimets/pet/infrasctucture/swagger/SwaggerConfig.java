@@ -35,7 +35,7 @@ public class SwaggerConfig {
                 .groupName("Security API")
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/api/v1/common/security/**"))
+                .paths(PathSelectors.ant("/api/v1/security/**"))
                 .build()
                 .additionalModels(typeResolver.resolve(ErrorResponseEnvelope.class),
                         typeResolver.resolve(ResponseEnvelope.class),
@@ -60,7 +60,7 @@ public class SwaggerConfig {
                 .groupName("User Profile API")
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/api/v1/common/profile/**"))
+                .paths(PathSelectors.ant("/api/v1/profile/**"))
                 .build()
                 .additionalModels(typeResolver.resolve(ErrorResponseEnvelope.class),
                         typeResolver.resolve(ResponseEnvelope.class),
@@ -75,7 +75,7 @@ public class SwaggerConfig {
                 .groupName("User API")
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/api/v1/common/user/**"))
+                .paths(PathSelectors.ant("/api/v1/user/**"))
                 .build()
                 .additionalModels(typeResolver.resolve(ErrorResponseEnvelope.class),
                         typeResolver.resolve(ResponseEnvelope.class),

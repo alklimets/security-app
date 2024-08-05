@@ -1,7 +1,7 @@
 package com.aklimets.pet.domain.model.authenticationhistory;
 
 import com.aklimets.pet.domain.model.authenticationhistory.attribute.AuthenticationHistoryIdNumber;
-import com.aklimets.pet.domain.model.authenticationhistory.attribute.AuthenticationTimestamp;
+import com.aklimets.pet.domain.model.common.CreationTimestamp;
 import com.aklimets.pet.domain.model.authenticationhistory.attribute.IpAddress;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class AuthenticationHistory {
 
     private IpAddress ipAddress;
 
-    private AuthenticationTimestamp timestamp;
+    private CreationTimestamp timestamp;
 
     protected AuthenticationHistory() {
     }

@@ -2,7 +2,7 @@ package com.aklimets.pet.domain.model.authenticationhistory;
 
 import com.aklimets.pet.domain.dto.authentication.AuthenticationHistoryDTO;
 import com.aklimets.pet.domain.model.authenticationhistory.attribute.AuthenticationHistoryIdNumber;
-import com.aklimets.pet.domain.model.authenticationhistory.attribute.AuthenticationTimestamp;
+import com.aklimets.pet.domain.model.common.CreationTimestamp;
 import com.aklimets.pet.util.datetime.TimeSource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class AuthenticationHistoryFactory {
                 AuthenticationHistoryIdNumber.generate(),
                 dto.userId(),
                 dto.ipAddress(),
-                new AuthenticationTimestamp(timeSource.getCurrentLocalDateTime())
+                new CreationTimestamp(timeSource.getCurrentLocalDateTime())
         );
     }
 }

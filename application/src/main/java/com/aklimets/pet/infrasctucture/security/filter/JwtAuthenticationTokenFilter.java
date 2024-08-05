@@ -47,12 +47,12 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
                                         JwtSuccessHandler jwtSuccessHandler,
                                         JwtExtractor jwtExtractor,
                                         UserRepository userRepository) {
-        super("/api/v1/common/user/**");
+        super("/api/v1/user/**");
         setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(
                 // all urls which should be authenticated should be listed here, because if not then the auth context
                 // will be null and spring security will return 401 because of missing authentication
-                new AntPathRequestMatcher("/api/v1/common/user/**"),
-                new AntPathRequestMatcher("/api/v1/common/profile/**"))
+                new AntPathRequestMatcher("/api/v1/user/**"),
+                new AntPathRequestMatcher("/api/v1/profile/**"))
         );
         setAuthenticationManager(authenticationManager);
         setAuthenticationSuccessHandler(jwtSuccessHandler);

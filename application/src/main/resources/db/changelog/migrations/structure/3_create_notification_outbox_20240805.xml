@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet id="notification_outbox_20240805" author="aklimets">
+        <createTable tableName="notification_outbox" schemaName="security">
+            <column name="id" type="varchar(100)">
+                <constraints primaryKey="true" primaryKeyName="primary_key_notification_outbox"/>
+            </column>
+            <column name="email" type="varchar(100)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="status" type="varchar(1)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="subject" type="varchar(500)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="content" type="varchar(5000)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="timestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

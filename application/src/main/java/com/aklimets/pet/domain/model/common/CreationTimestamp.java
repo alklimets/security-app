@@ -1,4 +1,4 @@
-package com.aklimets.pet.domain.model.authenticationhistory.attribute;
+package com.aklimets.pet.domain.model.common;
 
 import com.aklimets.pet.buildingblock.interfaces.DomainAttribute;
 import lombok.AllArgsConstructor;
@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
-public class AuthenticationTimestamp implements DomainAttribute<LocalDateTime> {
+public class CreationTimestamp implements DomainAttribute<LocalDateTime> {
 
     @Column(name = "timestamp")
     @NotNull
     private LocalDateTime value;
 
-    protected AuthenticationTimestamp() {
+    protected CreationTimestamp() {
     }
 }

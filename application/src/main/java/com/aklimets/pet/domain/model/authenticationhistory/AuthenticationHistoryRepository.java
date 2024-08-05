@@ -5,8 +5,6 @@ import com.aklimets.pet.domain.model.authenticationhistory.attribute.IpAddress;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
-
 public interface AuthenticationHistoryRepository extends JpaRepository<AuthenticationHistory, AuthenticationHistoryIdNumber> {
 
     boolean existsByUserIdAndIpAddress(UserIdNumber userIdNumber, IpAddress ip);
