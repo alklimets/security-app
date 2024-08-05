@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping("/api/v1/common/user")
+@RequestMapping("/api/v1/users")
 @SwaggerDefinition(consumes = "application/json", produces = "application/json") // swagger related annotation
 @Api(tags = "User API", value = "API to work with user") // swagger related annotation with info about APIs
 @WithBasicAuth

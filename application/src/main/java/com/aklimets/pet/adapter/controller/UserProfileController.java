@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping("/api/v1/common/profile") // api versioning included
+@RequestMapping("/api/v1/profiles") // api versioning included
 @SwaggerDefinition(consumes = "application/json", produces = "application/json")
 @Api(tags = "Profile API", value = "API to work with security")
 @WithBasicAuth
@@ -43,7 +43,7 @@ public class UserProfileController {
 
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "User profile", produces = "application/json")
-    @GetMapping
+    @GetMapping(path = "/authenticated")
     public UserProfileResponse getAuthenticatedUserProfile(@ApiIgnore UserAuthentication authentication) {
         return userService.getAuthenticatedUserProfile(authentication);
     }

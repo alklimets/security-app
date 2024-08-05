@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/common/security")
+@RequestMapping("/api/v1/security")
 @SwaggerDefinition(consumes = "application/json", produces = "application/json") // swagger related annotation
 @Api(tags = "Security API", value = "API to work with security") // swagger related annotation with info about APIs
 @Slf4j
@@ -47,8 +47,8 @@ public class SecurityController {
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "New user registration", produces = "application/json")
-    @PostMapping("/registration")
+    @ApiOperation(value = "Register new user", produces = "application/json")
+    @PostMapping("/register")
     public AuthenticationTokensResponse register(@Valid @RequestBody RegistrationRequest request) {
         return authenticationService.register(request);
     }
