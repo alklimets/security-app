@@ -25,6 +25,9 @@
             <column name="content" type="varchar(5000)">
                 <constraints nullable="false" unique="false"/>
             </column>
+            <column name="request_id" type="varchar(5000)">
+                <constraints nullable="false" unique="false"/>
+            </column>
             <column name="timestamp" type="timestamp">
                 <constraints nullable="false"/>
             </column>

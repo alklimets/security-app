@@ -10,8 +10,10 @@ import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxReposi
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationContent;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
 import com.aklimets.pet.domain.model.user.User;
+import com.aklimets.pet.model.attribute.RequestId;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -65,7 +67,8 @@ public class AuthenticationHistoryService {
     private void sendWarningNotification(User user) {
         var outboxDto = new NotificationOutboxDTO(user.getEmail(),
                 new NotificationSubject("Log in from new location"),
-                new NotificationContent("You have been authenticated from new location. If it was not you please change your password."));
+                new NotificationContent("You have been authenticated from new location. If it was not you please change your password."),
+                new RequestId(MDC.get("requestId")));
         var outboxEvent = outboxFactory.create(outboxDto);
         outboxRepository.save(outboxEvent);
     }

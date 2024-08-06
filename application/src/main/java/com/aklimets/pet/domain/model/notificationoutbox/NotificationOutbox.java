@@ -6,6 +6,7 @@ import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationOu
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.OutboxProcessStatus;
 import com.aklimets.pet.model.attribute.EmailAddress;
+import com.aklimets.pet.model.attribute.RequestId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -29,6 +30,9 @@ public class NotificationOutbox {
 
     @Enumerated(EnumType.STRING)
     private OutboxProcessStatus status;
+
+    @AttributeOverride(name = "value", column = @Column(name = "request_id"))
+    private RequestId requestId;
 
     private CreationTimestamp timestamp;
 

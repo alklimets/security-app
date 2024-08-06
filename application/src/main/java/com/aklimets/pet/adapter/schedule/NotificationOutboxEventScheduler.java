@@ -34,7 +34,8 @@ public class NotificationOutboxEventScheduler {
             var domainNotificationEvent = new DomainNotificationKafkaEvent(
                     notificationOutbox.getEmail(),
                     notificationOutbox.getSubject(),
-                    notificationOutbox.getContent()
+                    notificationOutbox.getContent(),
+                    notificationOutbox.getRequestId()
             );
             adapter.send(domainNotificationEvent);
             notificationOutbox.process();

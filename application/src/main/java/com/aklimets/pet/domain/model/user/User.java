@@ -17,7 +17,7 @@ import javax.persistence.*;
  */
 @Getter
 @Entity
-@Table(name = "users", schema = "attibute")
+@Table(name = "users", schema = "security")
 @AllArgsConstructor
 public class User implements UsernameAndIdentity {
 
