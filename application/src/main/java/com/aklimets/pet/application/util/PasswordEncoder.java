@@ -1,6 +1,6 @@
 package com.aklimets.pet.application.util;
 
-import com.aklimets.pet.model.security.Password;
+import com.aklimets.pet.model.attribute.Password;
 import com.google.common.hash.Hashing;
 import org.springframework.stereotype.Component;
 

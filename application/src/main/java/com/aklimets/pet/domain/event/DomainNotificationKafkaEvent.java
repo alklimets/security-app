@@ -3,7 +3,7 @@ package com.aklimets.pet.domain.event;
 import com.aklimets.pet.buildingblock.interfaces.DomainEvent;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationContent;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
-import com.aklimets.pet.model.security.EmailAddress;
+import com.aklimets.pet.model.attribute.EmailAddress;
 
 
 public record DomainNotificationKafkaEvent(EmailAddress address,

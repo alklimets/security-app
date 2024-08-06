@@ -1,6 +1,6 @@
 package com.aklimets.pet.domain.dto.request;
 
-import com.aklimets.pet.model.security.RefreshToken;
+import com.aklimets.pet.model.attribute.RefreshToken;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

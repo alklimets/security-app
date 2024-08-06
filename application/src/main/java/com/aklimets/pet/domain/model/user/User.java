@@ -3,10 +3,10 @@ package com.aklimets.pet.domain.model.user;
 import com.aklimets.pet.buildingblock.interfaces.UsernameAndIdentity;
 import com.aklimets.pet.domain.model.user.attribute.Role;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
-import com.aklimets.pet.model.security.EmailAddress;
-import com.aklimets.pet.model.security.Password;
-import com.aklimets.pet.model.security.RefreshToken;
-import com.aklimets.pet.model.security.Username;
+import com.aklimets.pet.model.attribute.EmailAddress;
+import com.aklimets.pet.model.attribute.Password;
+import com.aklimets.pet.model.attribute.RefreshToken;
+import com.aklimets.pet.model.attribute.Username;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -17,7 +17,7 @@ import javax.persistence.*;
  */
 @Getter
 @Entity
-@Table(name = "users", schema = "security")
+@Table(name = "users", schema = "attibute")
 @AllArgsConstructor
 public class User implements UsernameAndIdentity {
 

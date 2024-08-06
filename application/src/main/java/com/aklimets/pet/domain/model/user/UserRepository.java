@@ -2,9 +2,9 @@ package com.aklimets.pet.domain.model.user;
 
 
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
-import com.aklimets.pet.model.security.EmailAddress;
-import com.aklimets.pet.model.security.RefreshToken;
-import com.aklimets.pet.model.security.Username;
+import com.aklimets.pet.model.attribute.EmailAddress;
+import com.aklimets.pet.model.attribute.RefreshToken;
+import com.aklimets.pet.model.attribute.Username;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -2,7 +2,7 @@ package com.aklimets.pet.domain.dto.outbox;
 
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationContent;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
-import com.aklimets.pet.model.security.EmailAddress;
+import com.aklimets.pet.model.attribute.EmailAddress;
 
 public record NotificationOutboxDTO (EmailAddress emailAddress,
                                     NotificationSubject subject,

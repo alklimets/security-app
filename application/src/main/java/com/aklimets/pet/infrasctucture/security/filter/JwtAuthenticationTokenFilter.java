@@ -5,8 +5,8 @@ import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
+import com.aklimets.pet.model.attribute.AccessToken;
 import com.aklimets.pet.model.jwt.JwtUser;
-import com.aklimets.pet.model.security.AccessToken;
 import com.aklimets.pet.util.jwt.JwtExtractor;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -104,7 +104,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     }
 
     private UserAuthentication createUserAuthentication(JwtUser jwtUser) {
-        var user = userRepository.findById( new UserIdNumber(jwtUser.id().getValue()))
+        var user = userRepository.findById(new UserIdNumber(jwtUser.id().getValue()))
                 .orElseThrow(() -> new NotFoundException("Error not found", format("User with id %s not found", jwtUser.id())));
         return new UserAuthentication(user.getId(), user.getUsername(), List.of(new SimpleGrantedAuthority(user.getRole().name())));
     }

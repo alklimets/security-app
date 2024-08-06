@@ -5,7 +5,7 @@ import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationCo
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationOutboxIdNumber;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.OutboxProcessStatus;
-import com.aklimets.pet.model.security.EmailAddress;
+import com.aklimets.pet.model.attribute.EmailAddress;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

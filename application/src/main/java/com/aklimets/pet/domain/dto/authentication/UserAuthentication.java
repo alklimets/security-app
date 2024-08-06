@@ -1,7 +1,7 @@
 package com.aklimets.pet.domain.dto.authentication;
 
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
-import com.aklimets.pet.model.security.Username;
+import com.aklimets.pet.model.attribute.Username;
 import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
