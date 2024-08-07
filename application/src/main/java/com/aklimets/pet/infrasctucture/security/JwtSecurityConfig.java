@@ -7,7 +7,7 @@ import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFil
 import com.aklimets.pet.infrasctucture.security.filter.RequestIdFilter;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.infrasctucture.security.provider.JwtAuthenticationProvider;
-import com.aklimets.pet.util.jwt.JwtExtractor;
+import com.aklimets.pet.jwt.util.JwtExtractor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

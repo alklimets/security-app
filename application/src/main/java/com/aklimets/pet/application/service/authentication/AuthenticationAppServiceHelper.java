@@ -4,7 +4,7 @@ import com.aklimets.pet.application.util.PasswordEncoder;
 import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
 import com.aklimets.pet.domain.model.user.User;
-import com.aklimets.pet.util.jwt.JwtGenerator;
+import com.aklimets.pet.jwt.util.JwtGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

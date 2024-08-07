@@ -12,9 +12,9 @@ import com.aklimets.pet.domain.exception.UnauthorizedException;
 import com.aklimets.pet.domain.model.user.UserFactory;
 import com.aklimets.pet.domain.model.userprofile.UserProfileFactory;
 import com.aklimets.pet.domain.service.UserDomainService;
+import com.aklimets.pet.jwt.util.JwtExtractor;
 import com.aklimets.pet.model.attribute.EmailAddress;
 import com.aklimets.pet.model.attribute.Username;
-import com.aklimets.pet.util.jwt.JwtExtractor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
