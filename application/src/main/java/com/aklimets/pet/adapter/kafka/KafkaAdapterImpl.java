@@ -1,6 +1,7 @@
 package com.aklimets.pet.adapter.kafka;
 
 import com.aklimets.pet.buildingblock.interfaces.DomainEvent;
+import com.aklimets.pet.buildingblock.interfaces.RequestableDomainEvent;
 import com.aklimets.pet.domain.event.DomainEventAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -24,12 +25,16 @@ public class KafkaAdapterImpl implements DomainEventAdapter {
 
     @Override
     public void send(DomainEvent event) {
-        log.info("Event has been sent - {}", event);
 
         Headers headers = new RecordHeaders();
-        headers.add("Test header", "Header value".getBytes());
+        if (event instanceof RequestableDomainEvent) {
+            String requestId = ((RequestableDomainEvent) event).getRequestId().getValue();
+            headers.add("requestId", requestId.getBytes());
+            MDC.put("requestId", requestId);
+        }
 
         ProducerRecord<String, DomainEvent> record = new ProducerRecord<>(notificationTopic, null, "Notification", event, headers);
         kafkaTemplate.send(record);
+        log.info("Event has been sent - {}", event);
     }
 }
