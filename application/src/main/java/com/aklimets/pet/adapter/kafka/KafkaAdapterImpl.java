@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.header.internals.RecordHeaders;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -30,7 +29,6 @@ public class KafkaAdapterImpl implements DomainEventAdapter {
         if (event instanceof RequestableDomainEvent) {
             String requestId = ((RequestableDomainEvent) event).getRequestId().getValue();
             headers.add("requestId", requestId.getBytes());
-            MDC.put("requestId", requestId);
         }
 
         ProducerRecord<String, DomainEvent> record = new ProducerRecord<>(notificationTopic, null, "Notification", event, headers);
