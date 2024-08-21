@@ -14,8 +14,8 @@ import java.util.UUID;
 @Embeddable
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-public class AuthenticationHistoryIdNumber implements DomainAttribute<String> {
+@EqualsAndHashCode(callSuper = true)
+public class AuthenticationHistoryIdNumber extends DomainAttribute<String> {
 
     @Column(name = "id")
     @NotNull

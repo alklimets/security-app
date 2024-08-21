@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-public class City implements DomainAttribute<String> {
+@EqualsAndHashCode(callSuper = true)
+public class City extends DomainAttribute<String> {
 
     @Column(name = "city")
     @NotNull

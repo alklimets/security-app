@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 @Embeddable
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-public class NotificationContent implements DomainAttribute<String> {
+@EqualsAndHashCode(callSuper = true)
+public class NotificationContent extends DomainAttribute<String> {
 
     @Column(name = "content")
     @NotNull

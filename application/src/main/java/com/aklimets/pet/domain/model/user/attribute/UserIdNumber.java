@@ -13,8 +13,8 @@ import java.util.UUID;
 @Embeddable
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-public class UserIdNumber implements DomainAttribute<String> {
+@EqualsAndHashCode(callSuper = true)
+public class UserIdNumber extends DomainAttribute<String> {
 
     @Column(name = "id")
     @NotNull
@@ -26,5 +26,4 @@ public class UserIdNumber implements DomainAttribute<String> {
     public static UserIdNumber generate() {
         return new UserIdNumber(UUID.randomUUID().toString());
     }
-
 }

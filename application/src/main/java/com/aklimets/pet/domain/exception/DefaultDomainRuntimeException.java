@@ -9,6 +9,7 @@ public abstract class DefaultDomainRuntimeException extends RuntimeException{
     private final String errorMessage;
 
     public DefaultDomainRuntimeException(String errorCode, String errorMessage) {
+        super(errorMessage);
         this.errorMessage = errorMessage;
         this.errorCode = errorCode;
     }

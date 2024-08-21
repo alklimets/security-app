@@ -13,8 +13,8 @@ import java.util.UUID;
 @Embeddable
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-public class UserProfileIdNumber implements DomainAttribute<String> {
+@EqualsAndHashCode(callSuper = true)
+public class UserProfileIdNumber extends DomainAttribute<String> {
 
     @Column(name = "id")
     @NotNull

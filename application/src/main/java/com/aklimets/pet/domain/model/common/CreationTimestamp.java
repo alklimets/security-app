@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Embeddable
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode
-public class CreationTimestamp implements DomainAttribute<LocalDateTime> {
+@EqualsAndHashCode(callSuper = true)
+public class CreationTimestamp extends DomainAttribute<LocalDateTime> {
 
     @Column(name = "timestamp")
     @NotNull
