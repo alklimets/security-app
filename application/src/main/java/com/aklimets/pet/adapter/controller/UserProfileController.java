@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping("/api/v1/profiles") // api versioning included
+@RequestMapping("/api/v1/profile") // api versioning included
 @SwaggerDefinition(consumes = "application/json", produces = "application/json")
 @Api(tags = "Profile API", value = "API to work with security")
 @WithBasicAuth

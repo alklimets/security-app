@@ -1,13 +1,11 @@
 package com.aklimets.pet.domain.model.user;
 
 import com.aklimets.pet.application.util.PasswordEncoder;
-import com.aklimets.pet.domain.model.user.attribute.Role;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
+import com.aklimets.pet.model.attribute.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @AllArgsConstructor

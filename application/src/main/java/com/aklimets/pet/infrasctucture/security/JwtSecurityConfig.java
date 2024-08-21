@@ -1,6 +1,5 @@
 package com.aklimets.pet.infrasctucture.security;
 
-import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.infrasctucture.security.constants.SecurityConstants;
 import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFilter;
@@ -10,7 +9,6 @@ import com.aklimets.pet.infrasctucture.security.provider.JwtAuthenticationProvid
 import com.aklimets.pet.jwt.util.JwtExtractor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,12 +35,6 @@ import java.util.Collections;
 @Slf4j
 public class JwtSecurityConfig {
 
-    @Value("${security.authorization.header}")
-    public String authorizationHeader;
-
-    @Value("${jwt.access.token.prefix}")
-    public String accessPrefix;
-
     @Autowired
     private AuthenticationEntryPoint entryPoint;
 
@@ -51,9 +43,6 @@ public class JwtSecurityConfig {
 
     @Autowired
     private JwtExtractor jwtExtractor;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private RequestIdFilter requestIdFilter;
@@ -66,12 +55,10 @@ public class JwtSecurityConfig {
     // if filter is a bean then it will be added once automatically, and if it will be added manually also then filter will be called twice
 //    @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
-        return new JwtAuthenticationTokenFilter(authorizationHeader,
-                accessPrefix,
+        return new JwtAuthenticationTokenFilter(
                 authenticationManager(),
                 new JwtSuccessHandler(),
-                jwtExtractor,
-                userRepository);
+                jwtExtractor);
     }
 
     @Bean

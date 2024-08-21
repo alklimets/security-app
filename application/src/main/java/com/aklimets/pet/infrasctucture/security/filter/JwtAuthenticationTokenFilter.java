@@ -1,13 +1,12 @@
 package com.aklimets.pet.infrasctucture.security.filter;
 
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
-import com.aklimets.pet.domain.exception.NotFoundException;
-import com.aklimets.pet.domain.model.user.UserRepository;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.infrasctucture.security.handler.JwtSuccessHandler;
 import com.aklimets.pet.jwt.model.JwtUser;
 import com.aklimets.pet.jwt.util.JwtExtractor;
 import com.aklimets.pet.model.attribute.AccessToken;
+import com.aklimets.pet.model.attribute.Username;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,27 +25,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static java.lang.String.format;
-
 
 @Slf4j
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
-    public String authorizationHeader;
+    private static final String AUTH_HEADER = "Authorization";
 
-    public String accessPrefix;
+    private static final String ACCESS_PREFIX = "Bearer";
 
     private final JwtExtractor jwtExtractor;
 
-    private final UserRepository userRepository;
 
-
-    public JwtAuthenticationTokenFilter(String authorizationHeader,
-                                        String accessPrefix,
-                                        AuthenticationManager authenticationManager,
+    public JwtAuthenticationTokenFilter(AuthenticationManager authenticationManager,
                                         JwtSuccessHandler jwtSuccessHandler,
-                                        JwtExtractor jwtExtractor,
-                                        UserRepository userRepository) {
+                                        JwtExtractor jwtExtractor) {
         super("/api/v1/user/**");
         setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(
                 // all urls which should be authenticated should be listed here, because if not then the auth context
@@ -57,9 +49,6 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
         setAuthenticationManager(authenticationManager);
         setAuthenticationSuccessHandler(jwtSuccessHandler);
         this.jwtExtractor = jwtExtractor;
-        this.userRepository = userRepository;
-        this.authorizationHeader = authorizationHeader;
-        this.accessPrefix = accessPrefix;
     }
 
     @Override
@@ -88,11 +77,11 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     }
 
     private String extractTokenFromHeader(HttpServletRequest request) {
-        return request.getHeader(authorizationHeader);
+        return request.getHeader(AUTH_HEADER);
     }
 
     private AccessToken extractTokenValue(String accessToken) {
-        return new AccessToken(accessToken.substring(accessPrefix.length() + 1));
+        return new AccessToken(accessToken.substring(ACCESS_PREFIX.length() + 1));
     }
 
     private void sendUnauthorizedError(HttpServletResponse response) throws IOException {
@@ -100,12 +89,12 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     }
 
     private boolean isAccessTokenInvalid(String accessToken) {
-        return accessToken == null || !accessToken.startsWith(accessPrefix);
+        return accessToken == null || !accessToken.startsWith(ACCESS_PREFIX);
     }
 
     private UserAuthentication createUserAuthentication(JwtUser jwtUser) {
-        var user = userRepository.findById(new UserIdNumber(jwtUser.id().getValue()))
-                .orElseThrow(() -> new NotFoundException("Error not found", format("User with id %s not found", jwtUser.id())));
-        return new UserAuthentication(user.getId(), user.getUsername(), List.of(new SimpleGrantedAuthority(user.getRole().name())));
+        return new UserAuthentication(new UserIdNumber(jwtUser.id().getValue()),
+                new Username(jwtUser.username().getValue()),
+                List.of(new SimpleGrantedAuthority(jwtUser.role().name())));
     }
 }

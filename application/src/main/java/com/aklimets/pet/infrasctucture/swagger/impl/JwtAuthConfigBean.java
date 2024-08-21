@@ -2,7 +2,6 @@ package com.aklimets.pet.infrasctucture.swagger.impl;
 
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.infrasctucture.swagger.AuthConfig;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.AuthorizationScope;
@@ -16,16 +15,13 @@ import java.util.List;
 @WithJwtAuth
 public class JwtAuthConfigBean implements AuthConfig {
 
-    @Value("${security.authorization.header}")
-    public String accessHeader;
-
     private static final String ACCESS = "Authorization";
     private static final String OPTIONAL = "Optional";
 
     @Override
     public List<SecurityScheme> getApiKeys() {
         return List.of(
-                new ApiKey(ACCESS, accessHeader, "header"),
+                new ApiKey(ACCESS, ACCESS, "header"),
                 new ApiKey(OPTIONAL, OPTIONAL, OPTIONAL)
         );
     }
