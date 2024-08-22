@@ -1,6 +1,5 @@
 package com.aklimets.pet.domain.dto.response;
 
-import com.aklimets.pet.buildingblock.interfaces.ResponseData;
 import com.aklimets.pet.domain.model.userprofile.attribute.*;
 import com.aklimets.pet.model.attribute.Username;
 
@@ -9,5 +8,5 @@ public record UserProfileResponse(UserProfileIdNumber id,
                                   Surname surname,
                                   Country country,
                                   City city,
-                                  Username username) implements ResponseData {
+                                  Username username) {
 }
