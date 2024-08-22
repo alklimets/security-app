@@ -1,6 +1,7 @@
 package com.aklimets.pet.domain.event;
 
-import com.aklimets.pet.buildingblock.interfaces.DomainEvent;
+
+import com.aklimets.pet.event.DomainEvent;
 
 public interface DomainEventAdapter {
 

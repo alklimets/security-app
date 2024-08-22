@@ -1,8 +1,9 @@
 package com.aklimets.pet.adapter.kafka;
 
-import com.aklimets.pet.buildingblock.interfaces.DomainEvent;
-import com.aklimets.pet.buildingblock.interfaces.RequestableDomainEvent;
 import com.aklimets.pet.domain.event.DomainEventAdapter;
+import com.aklimets.pet.event.DomainEvent;
+import com.aklimets.pet.event.RequestableDomainEvent;
+import com.aklimets.pet.model.attribute.RequestId;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.Headers;
@@ -26,8 +27,8 @@ public class KafkaAdapterImpl implements DomainEventAdapter {
     public void send(DomainEvent event) {
 
         Headers headers = new RecordHeaders();
-        if (event instanceof RequestableDomainEvent) {
-            String requestId = ((RequestableDomainEvent) event).getRequestId().getValue();
+        if (event instanceof RequestableDomainEvent<?> domainEvent) {
+            String requestId = ((RequestId) domainEvent.getRequestId()).getValue();
             headers.add("requestId", requestId.getBytes());
         }
 

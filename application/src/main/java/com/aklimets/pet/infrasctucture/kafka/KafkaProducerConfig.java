@@ -1,6 +1,6 @@
 package com.aklimets.pet.infrasctucture.kafka;
 
-import com.aklimets.pet.buildingblock.interfaces.DomainEvent;
+import com.aklimets.pet.event.DomainEvent;
 import com.aklimets.pet.infrasctucture.kafka.serializer.DomainEventSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

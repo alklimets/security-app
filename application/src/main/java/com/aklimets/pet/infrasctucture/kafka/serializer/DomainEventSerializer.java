@@ -1,6 +1,6 @@
 package com.aklimets.pet.infrasctucture.kafka.serializer;
 
-import com.aklimets.pet.buildingblock.interfaces.DomainEvent;
+import com.aklimets.pet.event.DomainEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.header.Headers;

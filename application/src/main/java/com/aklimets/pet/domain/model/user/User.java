@@ -1,7 +1,9 @@
 package com.aklimets.pet.domain.model.user;
 
-import com.aklimets.pet.buildingblock.interfaces.JwtClaims;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
+import com.aklimets.pet.jwt.model.JwtClaims;
+import com.aklimets.pet.jwt.model.attribute.RefreshToken;
+import com.aklimets.pet.jwt.model.attribute.Role;
 import com.aklimets.pet.model.attribute.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,11 +1,11 @@
 package com.aklimets.pet.adapter.controller;
 
 import com.aklimets.pet.application.service.authentication.AuthenticationAppService;
-import com.aklimets.pet.buildingblock.anotations.DefaultSwaggerEndpoint;
 import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
+import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
