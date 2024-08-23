@@ -1,15 +1,15 @@
 package com.aklimets.pet.infrasctucture.security;
 
+import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.jwt.util.JwtExtractor;
 import com.aklimets.pet.jwt.util.JwtGenerator;
 import com.aklimets.pet.jwt.util.JwtKeyReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("jwt-auth")
+@WithJwtAuth
 public class JwtConfig {
 
     @Value("${jwt.access.public.key.path}")
