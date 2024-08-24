@@ -1,4 +1,4 @@
-package com.aklimets.pet.infrasctucture.security;
+package com.aklimets.pet.infrasctucture.schedule;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
