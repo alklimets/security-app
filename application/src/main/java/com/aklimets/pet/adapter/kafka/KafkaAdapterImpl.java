@@ -1,7 +1,7 @@
 package com.aklimets.pet.adapter.kafka;
 
-import com.aklimets.pet.domain.event.DomainEventAdapter;
 import com.aklimets.pet.event.DomainEvent;
+import com.aklimets.pet.event.DomainEventAdapter;
 import com.aklimets.pet.event.RequestableDomainEvent;
 import com.aklimets.pet.model.attribute.RequestId;
 import lombok.extern.slf4j.Slf4j;

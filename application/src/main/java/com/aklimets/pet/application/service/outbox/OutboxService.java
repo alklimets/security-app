@@ -1,9 +1,9 @@
 package com.aklimets.pet.application.service.outbox;
 
-import com.aklimets.pet.domain.event.DomainEventAdapter;
 import com.aklimets.pet.domain.event.DomainNotificationKafkaEvent;
 import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutbox;
 import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxRepository;
+import com.aklimets.pet.event.DomainEventAdapter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
