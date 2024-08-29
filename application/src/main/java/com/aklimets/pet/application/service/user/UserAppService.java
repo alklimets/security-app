@@ -32,8 +32,8 @@ public class UserAppService {
 
     @Transactional(readOnly = true)
     public AuthorizedUserResponse authorize(UserAuthentication authentication) {
-        var user = userDomainService.loadUserByUsername(authentication.getUsername())
-                .orElseThrow(() -> new NotFoundException("Error not found", format("User with username %s not found", authentication.getUsername().getValue())));
+        var user = userDomainService.loadUserById(authentication.getId())
+                .orElseThrow(() -> new NotFoundException("Error not found", format("User with id %s not found", authentication.getId().getValue())));
         return new AuthorizedUserResponse(
                 user.getId(),
                 user.getUsername(),
@@ -55,12 +55,14 @@ public class UserAppService {
         var user = getUserEntity(userId);
         var details = getUserProfileEntity(userId);
         return new UserProfileResponse(
+                user.getId(),
                 details.getId(),
                 details.getName(),
                 details.getSurname(),
                 details.getAddress().getCountry(),
                 details.getAddress().getCity(),
-                user.getUsername());
+                user.getUsername(),
+                user.getStatus());
     }
 
     private User getUserEntity(UserIdNumber userId) {

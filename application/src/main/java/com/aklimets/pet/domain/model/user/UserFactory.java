@@ -2,6 +2,7 @@ package com.aklimets.pet.domain.model.user;
 
 import com.aklimets.pet.application.util.PasswordEncoder;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
+import com.aklimets.pet.domain.model.user.attribute.AccountStatus;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.jwt.model.attribute.Role;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,8 @@ public class UserFactory {
                 userRequestDTO.email(),
                 passwordEncoder.encode(userRequestDTO.password()),
                 null,
-                Role.USER
+                Role.USER,
+                AccountStatus.PENDING_ACTIVATION
         );
     }
 }

@@ -2,6 +2,7 @@ package com.aklimets.pet.domain.service;
 
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.user.UserRepository;
+import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.domain.model.userprofile.UserProfile;
 import com.aklimets.pet.domain.model.userprofile.UserProfileRepository;
 import com.aklimets.pet.jwt.model.attribute.RefreshToken;
@@ -24,8 +25,8 @@ public class UserDomainService {
     private final UserProfileRepository userProfileRepository;
 
     @Transactional(readOnly = true)
-    public Optional<User> loadUserByUsername(Username username) {
-        return userRepository.getUserByUsername(username);
+    public Optional<User> loadUserById(UserIdNumber id) {
+        return userRepository.getUserById(id);
     }
 
     @Transactional(readOnly = true)
@@ -44,8 +45,8 @@ public class UserDomainService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> loadUserByUsernameAndRefreshToken(Username username, RefreshToken refreshToken) {
-        return userRepository.getUserByUsernameAndRefreshToken(username, refreshToken);
+    public Optional<User> loadUserByIdAndRefreshToken(UserIdNumber id, RefreshToken refreshToken) {
+        return userRepository.getUserByIdAndRefreshToken(id, refreshToken);
     }
 
     @Transactional

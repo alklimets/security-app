@@ -1,14 +1,19 @@
 package com.aklimets.pet.domain.model.user;
 
+import com.aklimets.pet.domain.model.user.attribute.AccountStatus;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.jwt.model.JwtClaims;
 import com.aklimets.pet.jwt.model.attribute.RefreshToken;
 import com.aklimets.pet.jwt.model.attribute.Role;
-import com.aklimets.pet.model.attribute.*;
+import com.aklimets.pet.model.attribute.EmailAddress;
+import com.aklimets.pet.model.attribute.Password;
+import com.aklimets.pet.model.attribute.Username;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.persistence.*;
+
+import static com.aklimets.pet.domain.model.user.attribute.AccountStatus.ACTIVE;
 
 /**
  * Aggregate root
@@ -37,10 +42,17 @@ public class User implements JwtClaims {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
+
     protected User() {
     }
 
     public void updateRefreshToken(RefreshToken refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void activate() {
+        this.status = ACTIVE;
     }
 }

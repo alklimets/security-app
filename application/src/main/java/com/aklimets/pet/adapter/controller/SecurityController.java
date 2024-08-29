@@ -5,6 +5,7 @@ import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
+import com.aklimets.pet.domain.dto.response.UserProfileResponse;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,7 +50,7 @@ public class SecurityController {
     @DefaultSwaggerEndpoint
     @ApiOperation(value = "Register new user", produces = "application/json")
     @PostMapping("/register")
-    public AuthenticationTokensResponse register(@Valid @RequestBody RegistrationRequest request) {
+    public UserProfileResponse register(@Valid @RequestBody RegistrationRequest request) {
         return authenticationService.register(request);
     }
 }

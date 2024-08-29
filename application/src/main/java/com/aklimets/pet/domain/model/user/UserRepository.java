@@ -6,16 +6,19 @@ import com.aklimets.pet.jwt.model.attribute.RefreshToken;
 import com.aklimets.pet.model.attribute.EmailAddress;
 import com.aklimets.pet.model.attribute.Username;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, UserIdNumber> {
 
+    @Query(value = "select u from User u where (u.username = :username or u.email = :email) and u.status = 'ACTIVE'")
     Optional<User> getUserByUsernameOrEmail(Username username, EmailAddress email);
 
-    Optional<User> getUserByUsername(Username username);
+    Optional<User> getUserById(UserIdNumber id);
 
-    Optional<User> getUserByUsernameAndRefreshToken(Username username, RefreshToken refreshToken);
+    @Query(value = "select u from User u where u.id = :id and u.refreshToken = :refreshToken and u.status = 'ACTIVE'")
+    Optional<User> getUserByIdAndRefreshToken(UserIdNumber id, RefreshToken refreshToken);
 
     boolean existsByUsername(Username username);
 

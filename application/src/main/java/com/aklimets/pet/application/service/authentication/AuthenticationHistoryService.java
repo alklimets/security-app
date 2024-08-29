@@ -43,10 +43,6 @@ public class AuthenticationHistoryService {
 
     private final NotificationOutboxRepository outboxRepository;
 
-    public void handleRegistration(User user) {
-        saveAuthenticationHistory(createAuthenticationDTO(user));
-    }
-
     public void handleAuthentication(User user) {
         var authenticationDTO = createAuthenticationDTO(user);
         validateAuthentication(authenticationDTO, user);
@@ -69,12 +65,12 @@ public class AuthenticationHistoryService {
     private void validateAuthentication(AuthenticationHistoryDTO dto, User user) {
         if (!authenticationHistoryRepository.existsByUserIdAndIpAddress(dto.userId(), dto.ipAddress())) {
             log.warn("Warning, authentication from different IP - {}", dto.ipAddress().getValue());
-            sendWarningNotification(user);
+            postWarningNotification(user);
         }
     }
 
     @SneakyThrows
-    private void sendWarningNotification(User user) {
+    private void postWarningNotification(User user) {
         Map<String,String> contentMap = Map.of("content", AUTH_WARN_MESSAGE);
         var outboxDto = new NotificationOutboxDTO(user.getEmail(),
                 new NotificationSubject("Log in from new location"),

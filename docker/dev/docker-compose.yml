@@ -14,6 +14,20 @@ services:
       - "5432:5432"
     networks:
       - pet_project_net
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "80:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - pet_project_net
 
   security-app:
       image: security-app
@@ -106,6 +120,7 @@ volumes:
   vol_postgres:
   redis-data:
   mongodb_data:
+  pgadmin_data:
 
 networks:
   pet_project_net:
