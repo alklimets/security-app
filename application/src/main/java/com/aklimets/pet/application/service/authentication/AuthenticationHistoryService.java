@@ -12,14 +12,19 @@ import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationCo
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.model.attribute.RequestId;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.protocol.types.Field;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -28,6 +33,8 @@ import java.util.Objects;
 public class AuthenticationHistoryService {
 
     public static final EventType AUTH_WARNING_EVENT_TYPE = new EventType("AuthWarning");
+    public static final String AUTH_WARN_MESSAGE = "You have been authenticated from new location. If it was not you please change your password.";
+    
     private final AuthenticationHistoryRepository authenticationHistoryRepository;
 
     private final AuthenticationHistoryFactory authenticationHistoryFactory;
@@ -66,10 +73,12 @@ public class AuthenticationHistoryService {
         }
     }
 
+    @SneakyThrows
     private void sendWarningNotification(User user) {
+        Map<String,String> contentMap = Map.of("content", AUTH_WARN_MESSAGE);
         var outboxDto = new NotificationOutboxDTO(user.getEmail(),
                 new NotificationSubject("Log in from new location"),
-                new NotificationContent("You have been authenticated from new location. If it was not you please change your password."),
+                new NotificationContent(new ObjectMapper().writeValueAsString(contentMap)),
                 AUTH_WARNING_EVENT_TYPE,
                 new RequestId(MDC.get("requestId")));
         var outboxEvent = outboxFactory.create(outboxDto);

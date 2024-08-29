@@ -5,9 +5,12 @@ import com.aklimets.pet.domain.event.attribute.NotificationContentMap;
 import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutbox;
 import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxRepository;
 import com.aklimets.pet.event.DomainEventAdapter;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +37,7 @@ public class OutboxService {
     private void processOutbox(NotificationOutbox outbox) {
         MDC.put("requestId", outbox.getRequestId().getValue());
         try {
-            Map<String, String> contentMap = Map.of("content", outbox.getContent().getValue());
+            Map<String, String> contentMap = new ObjectMapper().readValue(outbox.getContent().getValue(), new TypeReference<>() { });
             var domainNotificationEvent = new DomainNotificationKafkaEvent(
                     outbox.getEmail(),
                     outbox.getSubject(),
