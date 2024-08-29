@@ -1,6 +1,6 @@
 package com.aklimets.pet.domain.event;
 
-import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationContent;
+import com.aklimets.pet.domain.event.attribute.NotificationContentMap;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
 import com.aklimets.pet.event.RequestableDomainEvent;
 import com.aklimets.pet.model.attribute.EmailAddress;
@@ -9,7 +9,7 @@ import com.aklimets.pet.model.attribute.RequestId;
 
 public record DomainNotificationKafkaEvent(EmailAddress address,
                                            NotificationSubject subject,
-                                           NotificationContent content,
+                                           NotificationContentMap contentMap,
                                            RequestId requestId) implements RequestableDomainEvent<RequestId> {
 
     @Override
@@ -17,7 +17,7 @@ public record DomainNotificationKafkaEvent(EmailAddress address,
         return "DomainNotificationKafkaEvent{" +
                 "address=" + address.getValue() +
                 ", subject=" + subject.getValue() +
-                ", content=" + content.getValue() +
+                ", content=" + contentMap.getValue() +
                 ", requestId=" + requestId.getValue() +
                 '}';
     }

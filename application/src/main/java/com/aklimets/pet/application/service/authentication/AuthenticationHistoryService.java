@@ -7,6 +7,7 @@ import com.aklimets.pet.domain.model.authenticationhistory.AuthenticationHistory
 import com.aklimets.pet.domain.model.authenticationhistory.attribute.IpAddress;
 import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxFactory;
 import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxRepository;
+import com.aklimets.pet.domain.model.notificationoutbox.attribute.EventType;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationContent;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
 import com.aklimets.pet.domain.model.user.User;
@@ -26,6 +27,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class AuthenticationHistoryService {
 
+    public static final EventType AUTH_WARNING_EVENT_TYPE = new EventType("AuthWarning");
     private final AuthenticationHistoryRepository authenticationHistoryRepository;
 
     private final AuthenticationHistoryFactory authenticationHistoryFactory;
@@ -68,6 +70,7 @@ public class AuthenticationHistoryService {
         var outboxDto = new NotificationOutboxDTO(user.getEmail(),
                 new NotificationSubject("Log in from new location"),
                 new NotificationContent("You have been authenticated from new location. If it was not you please change your password."),
+                AUTH_WARNING_EVENT_TYPE,
                 new RequestId(MDC.get("requestId")));
         var outboxEvent = outboxFactory.create(outboxDto);
         outboxRepository.save(outboxEvent);

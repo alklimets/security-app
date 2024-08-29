@@ -1,6 +1,7 @@
 package com.aklimets.pet.application.service.outbox;
 
 import com.aklimets.pet.domain.event.DomainNotificationKafkaEvent;
+import com.aklimets.pet.domain.event.attribute.NotificationContentMap;
 import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutbox;
 import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxRepository;
 import com.aklimets.pet.event.DomainEventAdapter;
@@ -10,6 +11,8 @@ import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 import static com.aklimets.pet.domain.model.notificationoutbox.attribute.OutboxProcessStatus.N;
 
@@ -31,13 +34,14 @@ public class OutboxService {
     private void processOutbox(NotificationOutbox outbox) {
         MDC.put("requestId", outbox.getRequestId().getValue());
         try {
+            Map<String, String> contentMap = Map.of("content", outbox.getContent().getValue());
             var domainNotificationEvent = new DomainNotificationKafkaEvent(
                     outbox.getEmail(),
                     outbox.getSubject(),
-                    outbox.getContent(),
+                    new NotificationContentMap(contentMap),
                     outbox.getRequestId()
             );
-            adapter.send(domainNotificationEvent);
+            adapter.send(domainNotificationEvent, outbox.getEventType().getValue());
             outbox.process();
         } catch (Exception e) {
             outbox.fail();

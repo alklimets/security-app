@@ -1,10 +1,7 @@
 package com.aklimets.pet.domain.model.notificationoutbox;
 
 import com.aklimets.pet.domain.model.common.CreationTimestamp;
-import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationContent;
-import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationOutboxIdNumber;
-import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
-import com.aklimets.pet.domain.model.notificationoutbox.attribute.OutboxProcessStatus;
+import com.aklimets.pet.domain.model.notificationoutbox.attribute.*;
 import com.aklimets.pet.model.attribute.EmailAddress;
 import com.aklimets.pet.model.attribute.RequestId;
 import lombok.AllArgsConstructor;
@@ -33,6 +30,8 @@ public class NotificationOutbox {
 
     @AttributeOverride(name = "value", column = @Column(name = "request_id"))
     private RequestId requestId;
+
+    private EventType eventType;
 
     private CreationTimestamp timestamp;
 

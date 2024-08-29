@@ -23,6 +23,7 @@ public class NotificationOutboxFactory {
                 dto.content(),
                 OutboxProcessStatus.N,
                 dto.requestId(),
+                dto.eventType(),
                 new CreationTimestamp(timeSource.getCurrentLocalDateTime()));
     }
 }

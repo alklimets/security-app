@@ -8,8 +8,11 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
-    <include file="db/changelog/migrations/structure/1_create_user_structure_20230508.xml"/>
-    <include file="db/changelog/migrations/structure/2_create_auth_history_20240804.xml"/>
-    <include file="db/changelog/migrations/structure/3_create_notification_outbox_20240805.xml"/>
-    <include file="db/changelog/migrations/structure/4_add_event_type_to_outbox_20240829.xml"/>
+    <changeSet id="event_type_to_outbox_20240829" author="aklimets">
+        <addColumn tableName="notification_outbox" schemaName="security">
+            <column name="event_type" type="VARCHAR(30)" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
