@@ -7,21 +7,18 @@ import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api/v1/profile") // api versioning included
-@SwaggerDefinition(consumes = "application/json", produces = "application/json")
-@Api(tags = "Profile API", value = "API to work with security")
+@Tag(name = "Profile API", description = "API to work with security")
 @WithBasicAuth
 @WithJwtAuth
 @Slf4j
@@ -35,16 +32,16 @@ public class UserProfileController {
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "User profile", produces = "application/json")
+    @Operation(summary = "User profile")
     @GetMapping("/{userId}")
     public UserProfileResponse getUserProfile(@PathVariable("userId") UserIdNumber userId) {
         return userService.getUserProfile(userId);
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "User profile", produces = "application/json")
+    @Operation(summary = "User profile")
     @GetMapping(path = "/authenticated")
-    public UserProfileResponse getAuthenticatedUserProfile(@ApiIgnore UserAuthentication authentication) {
+    public UserProfileResponse getAuthenticatedUserProfile(UserAuthentication authentication) {
         return userService.getAuthenticatedUserProfile(authentication);
     }
 }

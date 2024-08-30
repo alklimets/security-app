@@ -7,9 +7,9 @@ import com.aklimets.pet.domain.dto.request.RegistrationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
 import com.aklimets.pet.domain.dto.response.UserProfileResponse;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +21,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/security")
-@SwaggerDefinition(consumes = "application/json", produces = "application/json") // swagger related annotation
-@Api(tags = "Security API", value = "API to work with security") // swagger related annotation with info about APIs
+@Tag(name = "Security API", description = "API to work with security") // swagger related annotation with info about APIs
 @Slf4j
 public class SecurityController {
 
@@ -34,21 +33,21 @@ public class SecurityController {
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "Authenticate", produces = "application/json")
+    @Operation(summary = "Authenticate")
     @PostMapping("/authenticate")
     public AuthenticationTokensResponse authenticate(@Valid @RequestBody AuthenticationRequest request) {
         return authenticationService.authenticate(request);
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "Refresh tokens pair", produces = "application/json")
+    @Operation(summary = "Refresh tokens pair")
     @PostMapping("/refresh")
     public AuthenticationTokensResponse refreshTokensPair(@Valid @RequestBody JwtRefreshTokenRequest tokens) {
         return authenticationService.refreshTokensPair(tokens);
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "Register new user", produces = "application/json")
+    @Operation(summary = "Register new user")
     @PostMapping("/register")
     public UserProfileResponse register(@Valid @RequestBody RegistrationRequest request) {
         return authenticationService.register(request);

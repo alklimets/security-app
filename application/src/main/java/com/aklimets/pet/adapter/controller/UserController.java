@@ -6,20 +6,17 @@ import com.aklimets.pet.domain.dto.response.AuthorizedUserResponse;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@SwaggerDefinition(consumes = "application/json", produces = "application/json") // swagger related annotation
-@Api(tags = "User API", value = "API to work with user") // swagger related annotation with info about APIs
+@Tag(name = "User API", description = "API to work with user") // swagger related annotation with info about APIs
 @WithBasicAuth
 @WithJwtAuth
 @Slf4j
@@ -33,9 +30,9 @@ public class UserController {
     }
 
     @DefaultSwaggerEndpoint
-    @ApiOperation(value = "Authorize", produces = "application/json")
+    @Operation(summary = "Authorize")
     @GetMapping("/authorize")
-    public AuthorizedUserResponse authorize(@ApiIgnore UserAuthentication authentication) {
+    public AuthorizedUserResponse authorize(UserAuthentication authentication) {
         log.info("Authenticated user: {}", authentication); // by providing class which implements authentication or principal the object will be populated automatically
         return userService.authorize(authentication);
     }

@@ -6,12 +6,16 @@ public class SecurityConstants {
             "/api/v1/security/**", // if something should not be authenticated and is not in the jwt filter patterns
                                           // it should be placed here to avoid 401 error by the framework
             "/v2/api-docs",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
             "/configuration/security",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/webjars/**"
+            "/webjars/**",
+            "/openapi",
+            "/openapi/**"
     };
 }

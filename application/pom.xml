@@ -94,7 +94,7 @@
 
         <dependency>
             <groupId>com.aklimets.pet</groupId>
-            <artifactId>swagger</artifactId>
+            <artifactId>api-docs</artifactId>
             <version>1.0.0</version>
         </dependency>
 
