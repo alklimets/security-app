@@ -1,6 +1,8 @@
 package com.aklimets.pet.infrasctucture.security;
 
+import com.aklimets.pet.infrasctucture.security.constants.SecurityConstants;
 import com.aklimets.pet.infrasctucture.security.entrypoint.AuthEntrypoint;
+import com.aklimets.pet.infrasctucture.security.filter.JwtAuthenticationTokenFilter;
 import com.aklimets.pet.infrasctucture.security.provider.BasicAuthProvider;
 import com.aklimets.pet.infrasctucture.security.annotation.WithBasicAuth;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +13,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.aklimets.pet.infrasctucture.security.constants.SecurityConstants.WHITE_LIST_URLS;
 
@@ -38,19 +42,15 @@ public class BasicSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Basic security config has been activated");
-        http.headers().cacheControl();
-        http.cors().and().csrf().disable()
-                .authorizeRequests()
-                .antMatchers(WHITE_LIST_URLS).permitAll()
-                .antMatchers("/**").authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(basicAuthProvider) // basic auth filter calls authManager -> authManager calls provider to authenticate
-                .exceptionHandling().authenticationEntryPoint(authEntrypoint)
-                .and()
-                .httpBasic();
+        http.cors(AbstractHttpConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests(authorizeRequests ->
+                authorizeRequests
+                        .requestMatchers(SecurityConstants.WHITE_LIST_URLS).permitAll() // if some endpoints does not require authentication then they should be included in the whitelist
+                        .anyRequest().authenticated()
+        );
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.exceptionHandling(handler -> handler.authenticationEntryPoint(authEntrypoint));http.authenticationProvider(basicAuthProvider);
         return http.build();
     }
 }

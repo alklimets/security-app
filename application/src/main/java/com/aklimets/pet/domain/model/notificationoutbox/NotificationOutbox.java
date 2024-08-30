@@ -7,7 +7,7 @@ import com.aklimets.pet.model.attribute.RequestId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Getter
 @Entity

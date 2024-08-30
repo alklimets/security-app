@@ -11,7 +11,7 @@ import com.aklimets.pet.model.attribute.Username;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import static com.aklimets.pet.domain.model.user.attribute.AccountStatus.ACTIVE;
 

@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import static com.aklimets.pet.domain.model.profileconfirmation.attribute.ConfirmationStatus.PROCESSED;
 

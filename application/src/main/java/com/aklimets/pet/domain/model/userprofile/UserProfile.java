@@ -6,7 +6,7 @@ import com.aklimets.pet.domain.model.userprofile.attribute.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Getter
 @AllArgsConstructor
