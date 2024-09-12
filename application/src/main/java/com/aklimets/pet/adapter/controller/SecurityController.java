@@ -5,17 +5,16 @@ import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
+import com.aklimets.pet.domain.dto.response.ProfileConfirmationResponse;
 import com.aklimets.pet.domain.dto.response.UserProfileResponse;
+import com.aklimets.pet.domain.model.profileconfirmation.attribute.ConfirmationCode;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/security")
@@ -49,5 +48,12 @@ public class SecurityController {
     @PostMapping("/register")
     public UserProfileResponse register(@Valid @RequestBody RegistrationRequest request) {
         return authenticationService.register(request);
+    }
+
+    @DefaultSwaggerEndpoint
+    @Operation(summary = "Confirm profile")
+    @GetMapping("/profile/confirm/{code}")
+    public ProfileConfirmationResponse confirmProfile(@PathVariable("code") ConfirmationCode code) {
+        return authenticationService.confirmProfile(code);
     }
 }

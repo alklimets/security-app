@@ -52,7 +52,7 @@ public class User implements JwtClaims {
         this.refreshToken = refreshToken;
     }
 
-    public void activate() {
+    public void confirmProfile() {
         this.status = ACTIVE;
     }
 }

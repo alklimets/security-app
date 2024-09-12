@@ -7,6 +7,7 @@ import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
 import com.aklimets.pet.domain.dto.response.AuthenticationTokensResponse;
+import com.aklimets.pet.domain.dto.response.ProfileConfirmationResponse;
 import com.aklimets.pet.domain.dto.response.UserProfileResponse;
 import com.aklimets.pet.domain.exception.BadRequestException;
 import com.aklimets.pet.domain.exception.NotFoundException;
@@ -20,6 +21,7 @@ import com.aklimets.pet.domain.model.profileconfirmation.ProfileConfirmation;
 import com.aklimets.pet.domain.model.profileconfirmation.ProfileConfirmationFactory;
 import com.aklimets.pet.domain.model.profileconfirmation.ProfileConfirmationRepository;
 import com.aklimets.pet.domain.model.profileconfirmation.attribute.ConfirmationCode;
+import com.aklimets.pet.domain.model.profileconfirmation.attribute.ConfirmationStatus;
 import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.user.UserFactory;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
@@ -36,6 +38,7 @@ import org.slf4j.MDC;
 
 import java.util.Map;
 
+import static com.aklimets.pet.domain.model.profileconfirmation.attribute.ConfirmationStatus.PENDING;
 import static java.lang.String.format;
 
 
@@ -125,5 +128,15 @@ public class AuthenticationAppService {
                 new RequestId(MDC.get("requestId")));
         var outboxEvent = notificationOutboxFactory.create(outboxDto);
         notificationOutboxRepository.save(outboxEvent);
+    }
+
+    public ProfileConfirmationResponse confirmProfile(ConfirmationCode code) {
+        var profileConfirmation = profileConfirmationRepository.getByConfirmationCodeAndStatus(code, PENDING)
+                .orElseThrow(() -> new NotFoundException("Error not found", "Profile confirmation not found"));
+        var user = userDomainService.loadUserById(profileConfirmation.getUserId())
+                .orElseThrow(() -> new NotFoundException("Error not found", "User not found"));
+        user.confirmProfile();
+        profileConfirmation.process();
+        return new ProfileConfirmationResponse(user.getStatus());
     }
 }

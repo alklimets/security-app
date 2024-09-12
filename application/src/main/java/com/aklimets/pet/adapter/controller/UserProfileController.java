@@ -1,6 +1,7 @@
 package com.aklimets.pet.adapter.controller;
 
 import com.aklimets.pet.application.service.user.UserAppService;
+import com.aklimets.pet.application.service.userprofile.UserProfileAppService;
 import com.aklimets.pet.domain.dto.authentication.UserAuthentication;
 import com.aklimets.pet.domain.dto.response.UserProfileResponse;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
@@ -24,24 +25,24 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserProfileController {
 
-    private final UserAppService userService;
+    private final UserProfileAppService userProfileAppService;
 
     @Autowired
-    public UserProfileController(UserAppService userService) {
-        this.userService = userService;
+    public UserProfileController(UserProfileAppService userProfileAppService) {
+        this.userProfileAppService = userProfileAppService;
     }
 
     @DefaultSwaggerEndpoint
     @Operation(summary = "User profile")
     @GetMapping("/{userId}")
     public UserProfileResponse getUserProfile(@PathVariable("userId") UserIdNumber userId) {
-        return userService.getUserProfile(userId);
+        return userProfileAppService.getUserProfile(userId);
     }
 
     @DefaultSwaggerEndpoint
     @Operation(summary = "User profile")
     @GetMapping(path = "/authenticated")
     public UserProfileResponse getAuthenticatedUserProfile(UserAuthentication authentication) {
-        return userService.getAuthenticatedUserProfile(authentication);
+        return userProfileAppService.getAuthenticatedUserProfile(authentication);
     }
 }
