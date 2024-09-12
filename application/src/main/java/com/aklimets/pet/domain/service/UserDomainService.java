@@ -30,6 +30,11 @@ public class UserDomainService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<User> loadUserByEmail(EmailAddress email) {
+        return userRepository.getUserByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<User> loadUserByUsernameOrEmail(Username username, EmailAddress email) {
         return userRepository.getUserByUsernameOrEmail(username, email);
     }

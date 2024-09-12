@@ -55,4 +55,8 @@ public class User implements JwtClaims {
     public void confirmProfile() {
         this.status = ACTIVE;
     }
+
+    public void changePassword(Password password) {
+        this.password = password;
+    }
 }

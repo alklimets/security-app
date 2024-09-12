@@ -1,29 +1,21 @@
 package com.aklimets.pet.application.service.authentication;
 
+import com.aklimets.pet.application.service.outbox.OutboxService;
 import com.aklimets.pet.domain.dto.authentication.AuthenticationHistoryDTO;
-import com.aklimets.pet.domain.dto.outbox.NotificationOutboxDTO;
+import com.aklimets.pet.domain.dto.outbox.OutboxContentDTO;
 import com.aklimets.pet.domain.model.authenticationhistory.AuthenticationHistoryFactory;
 import com.aklimets.pet.domain.model.authenticationhistory.AuthenticationHistoryRepository;
 import com.aklimets.pet.domain.model.authenticationhistory.attribute.IpAddress;
-import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxFactory;
-import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxRepository;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.EventType;
-import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationContent;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
 import com.aklimets.pet.domain.model.user.User;
-import com.aklimets.pet.model.attribute.RequestId;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.protocol.types.Field;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,9 +31,7 @@ public class AuthenticationHistoryService {
 
     private final AuthenticationHistoryFactory authenticationHistoryFactory;
 
-    private final NotificationOutboxFactory outboxFactory;
-
-    private final NotificationOutboxRepository outboxRepository;
+    private final OutboxService outboxService;
 
     public void handleAuthentication(User user) {
         var authenticationDTO = createAuthenticationDTO(user);
@@ -65,21 +55,12 @@ public class AuthenticationHistoryService {
     private void validateAuthentication(AuthenticationHistoryDTO dto, User user) {
         if (!authenticationHistoryRepository.existsByUserIdAndIpAddress(dto.userId(), dto.ipAddress())) {
             log.warn("Warning, authentication from different IP - {}", dto.ipAddress().getValue());
-            postWarningNotification(user);
+            outboxService.postNotification(
+                    new OutboxContentDTO(user.getEmail(),
+                    new NotificationSubject("Log in from new location"),
+                    Map.of("content", AUTH_WARN_MESSAGE),
+                    AUTH_WARNING_EVENT_TYPE));
         }
     }
-
-    @SneakyThrows
-    private void postWarningNotification(User user) {
-        Map<String,String> contentMap = Map.of("content", AUTH_WARN_MESSAGE);
-        var outboxDto = new NotificationOutboxDTO(user.getEmail(),
-                new NotificationSubject("Log in from new location"),
-                new NotificationContent(new ObjectMapper().writeValueAsString(contentMap)),
-                AUTH_WARNING_EVENT_TYPE,
-                new RequestId(MDC.get("requestId")));
-        var outboxEvent = outboxFactory.create(outboxDto);
-        outboxRepository.save(outboxEvent);
-    }
-
 
 }

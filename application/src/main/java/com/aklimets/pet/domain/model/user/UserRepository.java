@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<User, UserIdNumber> {
 
     Optional<User> getUserById(UserIdNumber id);
 
+    @Query(value = "select u from User u where u.email = :email and u.status = 'ACTIVE'")
+    Optional<User> getUserByEmail(EmailAddress email);
+
     @Query(value = "select u from User u where u.id = :id and u.refreshToken = :refreshToken and u.status = 'ACTIVE'")
     Optional<User> getUserByIdAndRefreshToken(UserIdNumber id, RefreshToken refreshToken);
 

@@ -8,8 +8,8 @@ import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
 import com.aklimets.pet.swagger.annotation.DefaultSwaggerEndpoint;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,14 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 @WithBasicAuth
 @WithJwtAuth
 @Slf4j
+@AllArgsConstructor
 public class UserController {
 
     private final UserAppService userService;
-
-    @Autowired
-    public UserController(UserAppService userService) {
-        this.userService = userService;
-    }
 
     @DefaultSwaggerEndpoint
     @Operation(summary = "Authorize")

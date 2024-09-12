@@ -1,8 +1,9 @@
 package com.aklimets.pet.application.service.authentication;
 
 
+import com.aklimets.pet.application.service.outbox.OutboxService;
 import com.aklimets.pet.buildingblock.anotations.ApplicationService;
-import com.aklimets.pet.domain.dto.outbox.NotificationOutboxDTO;
+import com.aklimets.pet.domain.dto.outbox.OutboxContentDTO;
 import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
 import com.aklimets.pet.domain.dto.request.RegistrationRequest;
@@ -12,29 +13,19 @@ import com.aklimets.pet.domain.dto.response.UserProfileResponse;
 import com.aklimets.pet.domain.exception.BadRequestException;
 import com.aklimets.pet.domain.exception.NotFoundException;
 import com.aklimets.pet.domain.exception.UnauthorizedException;
-import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxFactory;
-import com.aklimets.pet.domain.model.notificationoutbox.NotificationOutboxRepository;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.EventType;
-import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationContent;
 import com.aklimets.pet.domain.model.notificationoutbox.attribute.NotificationSubject;
-import com.aklimets.pet.domain.model.profileconfirmation.ProfileConfirmation;
 import com.aklimets.pet.domain.model.profileconfirmation.ProfileConfirmationFactory;
 import com.aklimets.pet.domain.model.profileconfirmation.ProfileConfirmationRepository;
 import com.aklimets.pet.domain.model.profileconfirmation.attribute.ConfirmationCode;
-import com.aklimets.pet.domain.model.profileconfirmation.attribute.ConfirmationStatus;
-import com.aklimets.pet.domain.model.user.User;
 import com.aklimets.pet.domain.model.user.UserFactory;
 import com.aklimets.pet.domain.model.user.attribute.UserIdNumber;
 import com.aklimets.pet.domain.model.userprofile.UserProfileFactory;
 import com.aklimets.pet.domain.service.UserDomainService;
 import com.aklimets.pet.jwt.util.JwtExtractor;
 import com.aklimets.pet.model.attribute.EmailAddress;
-import com.aklimets.pet.model.attribute.RequestId;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 
 import java.util.Map;
 
@@ -65,9 +56,7 @@ public class AuthenticationAppService {
 
     private final ProfileConfirmationFactory profileConfirmationFactory;
 
-    private final NotificationOutboxFactory notificationOutboxFactory;
-
-    private final NotificationOutboxRepository notificationOutboxRepository;
+    private final OutboxService outboxService;
 
     public AuthenticationTokensResponse authenticate(AuthenticationRequest user) {
         var userEntity = userDomainService.loadUserByUsernameOrEmail(user.username(), new EmailAddress(user.username().getValue()))
@@ -118,16 +107,12 @@ public class AuthenticationAppService {
                 user.getStatus());
     }
 
-    @SneakyThrows
     private void postConfirmationNotification(EmailAddress email, ConfirmationCode code) {
-        Map<String,String> contentMap = Map.of("code", code.getValue());
-        var outboxDto = new NotificationOutboxDTO(email,
+        outboxService.postNotification(
+                new OutboxContentDTO(email,
                 new NotificationSubject("Confirm your profile"),
-                new NotificationContent(new ObjectMapper().writeValueAsString(contentMap)),
-                CONFIRM_EVENT_TYPE,
-                new RequestId(MDC.get("requestId")));
-        var outboxEvent = notificationOutboxFactory.create(outboxDto);
-        notificationOutboxRepository.save(outboxEvent);
+                Map.of("code", code.getValue()),
+                CONFIRM_EVENT_TYPE));
     }
 
     public ProfileConfirmationResponse confirmProfile(ConfirmationCode code) {
