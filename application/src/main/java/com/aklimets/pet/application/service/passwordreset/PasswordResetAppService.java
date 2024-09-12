@@ -58,7 +58,7 @@ public class PasswordResetAppService {
         var reset = passwordResetRepository.findByResetCode(request.resetCode())
                 .orElseThrow(() -> new NotFoundException("Not found", "Reset code not found"));
 
-        if (reset.getCreationTimestamp().getValue().plusDays(1).isAfter(timeSource.getCurrentLocalDateTime())) {
+        if (reset.getCreationTimestamp().getValue().plusDays(1).isBefore(timeSource.getCurrentLocalDateTime())) {
             throw new BadRequestException("Bad request", "Reset code expired");
         }
 
