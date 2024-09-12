@@ -13,4 +13,5 @@
     <include file="db/changelog/migrations/structure/3_create_notification_outbox_20240805.xml"/>
     <include file="db/changelog/migrations/structure/4_add_event_type_to_outbox_20240829.xml"/>
     <include file="db/changelog/migrations/structure/5_profile_confirmation_20240829.xml"/>
+    <include file="db/changelog/migrations/structure/6_password_reset_20240912.xml"/>
 </databaseChangeLog>
