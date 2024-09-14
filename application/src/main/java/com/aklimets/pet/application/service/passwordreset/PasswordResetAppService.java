@@ -27,6 +27,8 @@ import java.util.Map;
 public class PasswordResetAppService {
 
     public static final EventType RESET_EVENT_TYPE = new EventType("ResetPassword");
+    public static final String RESET_PASSWORD_STR = "Reset password";
+    public static final String CODE_KEY_STR = "code";
 
     private final UserDomainService userDomainService;
 
@@ -47,8 +49,8 @@ public class PasswordResetAppService {
                     passwordResetRepository.save(reset);
                     outboxService.postNotification(
                             new OutboxContentDTO(u.getEmail(),
-                            new NotificationSubject("Reset password"),
-                            Map.of("code", reset.getResetCode().getValue()),
+                            new NotificationSubject(RESET_PASSWORD_STR),
+                            Map.of(CODE_KEY_STR, reset.getResetCode().getValue()),
                             RESET_EVENT_TYPE));
                 });
         return new PasswordResetResponse(ResetStatus.RESET_IN_PROGRESS);

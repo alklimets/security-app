@@ -30,6 +30,8 @@ import static com.aklimets.pet.domain.model.notificationoutbox.attribute.OutboxP
 @Transactional
 public class OutboxService {
 
+    public static final String REQUEST_ID = "requestId";
+
     private final DomainEventAdapter adapter;
 
     private final NotificationOutboxRepository outboxRepository;
@@ -44,7 +46,7 @@ public class OutboxService {
     }
 
     private void processOutbox(NotificationOutbox outbox) {
-        MDC.put("requestId", outbox.getRequestId().getValue());
+        MDC.put(REQUEST_ID, outbox.getRequestId().getValue());
         try {
             Map<String, String> contentMap = new ObjectMapper().readValue(outbox.getContent().getValue(), new TypeReference<>() { });
             var domainNotificationEvent = new DomainNotificationKafkaEvent(
@@ -67,7 +69,7 @@ public class OutboxService {
                 content.subject(),
                 new NotificationContent(new ObjectMapper().writeValueAsString(content.contentMap())),
                 content.eventType(),
-                new RequestId(MDC.get("requestId")));
+                new RequestId(MDC.get(REQUEST_ID)));
         var outboxEvent = notificationOutboxFactory.create(outboxDto);
         notificationOutboxRepository.save(outboxEvent);
     }

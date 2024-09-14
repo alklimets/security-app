@@ -39,6 +39,7 @@ import static java.lang.String.format;
 public class AuthenticationAppService {
 
     public static final EventType CONFIRM_EVENT_TYPE = new EventType("ConfirmProfile");
+    public static final String CODE_KEY_STR = "code";
 
     private final UserDomainService userDomainService;
 
@@ -111,7 +112,7 @@ public class AuthenticationAppService {
         outboxService.postNotification(
                 new OutboxContentDTO(email,
                 new NotificationSubject("Confirm your profile"),
-                Map.of("code", code.getValue()),
+                Map.of(CODE_KEY_STR, code.getValue()),
                 CONFIRM_EVENT_TYPE));
     }
 

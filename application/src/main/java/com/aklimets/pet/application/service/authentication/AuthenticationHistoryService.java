@@ -26,7 +26,9 @@ public class AuthenticationHistoryService {
 
     public static final EventType AUTH_WARNING_EVENT_TYPE = new EventType("AuthWarning");
     public static final String AUTH_WARN_MESSAGE = "You have been authenticated from new location. If it was not you please change your password.";
-    
+    public static final String CONTENT_KEY_STR = "content";
+    public static final String LOG_IN_FROM_NEW_LOCATION = "Log in from new location";
+
     private final AuthenticationHistoryRepository authenticationHistoryRepository;
 
     private final AuthenticationHistoryFactory authenticationHistoryFactory;
@@ -57,8 +59,8 @@ public class AuthenticationHistoryService {
             log.warn("Warning, authentication from different IP - {}", dto.ipAddress().getValue());
             outboxService.postNotification(
                     new OutboxContentDTO(user.getEmail(),
-                    new NotificationSubject("Log in from new location"),
-                    Map.of("content", AUTH_WARN_MESSAGE),
+                    new NotificationSubject(LOG_IN_FROM_NEW_LOCATION),
+                    Map.of(CONTENT_KEY_STR, AUTH_WARN_MESSAGE),
                     AUTH_WARNING_EVENT_TYPE));
         }
     }
