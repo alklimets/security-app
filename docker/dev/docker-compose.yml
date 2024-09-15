@@ -113,6 +113,10 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    environment:
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
+      - 'MONGO_INITDB_ROOT_PASSWORD=123456789'
+      - 'MONGO_INITDB_DATABASE=admin'
     networks:
       - pet_project_net
 
