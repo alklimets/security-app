@@ -1,9 +1,10 @@
 package com.aklimets.pet.infrasctucture.security;
 
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
+import com.aklimets.pet.infrasctucture.security.keyprovider.JwtKeyPairProvider;
 import com.aklimets.pet.jwt.util.JwtExtractor;
 import com.aklimets.pet.jwt.util.JwtGenerator;
-import com.aklimets.pet.jwt.util.JwtKeyReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,36 +13,25 @@ import org.springframework.context.annotation.Configuration;
 @WithJwtAuth
 public class JwtConfig {
 
-    @Value("${jwt.access.public.key.path}")
-    private String accessPublicKeyPath;
-
-    @Value("${jwt.refresh.public.key.path}")
-    private String refreshPublicKeyPath;
-
     @Value("${jwt.access.token.ttl}")
     private String accessTokenTtl;
 
     @Value("${jwt.refresh.token.ttl}")
     private String refreshTokenTtl;
 
-    @Value("${jwt.access.private.key.path}")
-    private String accessPrivateKeyPath;
+    @Autowired
+    private JwtKeyPairProvider jwtAccessKeyPairProvider;
 
-    @Value("${jwt.refresh.private.key.path}")
-    private String refreshPrivateKeyPath;
+    @Autowired
+    private JwtKeyPairProvider jwtRefreshKeyPairProvider;
 
     @Bean
-    public JwtKeyReader jwtKeyReader() {
-        return new JwtKeyReader();
+    public JwtGenerator jwtGenerator() {
+        return new JwtGenerator(jwtAccessKeyPairProvider, jwtRefreshKeyPairProvider, accessTokenTtl, refreshTokenTtl);
     }
 
     @Bean
-    public JwtGenerator jwtGenerator() throws Exception {
-        return new JwtGenerator(accessTokenTtl, refreshTokenTtl, accessPrivateKeyPath, refreshPrivateKeyPath, jwtKeyReader());
-    }
-
-    @Bean
-    public JwtExtractor jwtExtractor() throws Exception {
-        return new JwtExtractor(accessPublicKeyPath, refreshPublicKeyPath, jwtKeyReader());
+    public JwtExtractor jwtExtractor() {
+        return new JwtExtractor(jwtAccessKeyPairProvider, jwtRefreshKeyPairProvider);
     }
 }
