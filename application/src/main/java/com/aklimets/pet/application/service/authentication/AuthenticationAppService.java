@@ -3,6 +3,7 @@ package com.aklimets.pet.application.service.authentication;
 
 import com.aklimets.pet.application.service.outbox.OutboxService;
 import com.aklimets.pet.buildingblock.anotations.ApplicationService;
+import com.aklimets.pet.buildingblock.interfaces.DomainAttribute;
 import com.aklimets.pet.domain.dto.outbox.OutboxContentDTO;
 import com.aklimets.pet.domain.dto.request.AuthenticationRequest;
 import com.aklimets.pet.domain.dto.request.JwtRefreshTokenRequest;
@@ -73,7 +74,7 @@ public class AuthenticationAppService {
 
     public AuthenticationTokensResponse refreshTokensPair(JwtRefreshTokenRequest payload) {
         var refreshUser = jwtExtractor.extractRefreshJwtUser(payload.refreshToken());
-        var userEntity = userDomainService.loadUserByIdAndRefreshToken((UserIdNumber) refreshUser.id(), payload.refreshToken())
+        var userEntity = userDomainService.loadUserByIdAndRefreshToken(new UserIdNumber(refreshUser.id().getValue()), payload.refreshToken())
                 .orElseThrow(() -> new NotFoundException("Error not found", "No user information were found for provided claims"));
 
         var tokens = helper.generateUserTokens(userEntity);

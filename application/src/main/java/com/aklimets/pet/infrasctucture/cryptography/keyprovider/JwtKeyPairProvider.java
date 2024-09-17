@@ -1,7 +1,6 @@
 package com.aklimets.pet.infrasctucture.cryptography.keyprovider;
 
 import com.aklimets.pet.crypto.model.AsymmetricAlgorithm;
-import com.aklimets.pet.crypto.provider.KeyPairProvider;
 import com.aklimets.pet.crypto.provider.VersionedKeyPairProvider;
 import com.aklimets.pet.crypto.util.AsymmetricKeyUtil;
 import com.aklimets.pet.crypto.util.SymmetricKeyUtil;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.PrivateKey;
