@@ -1,38 +1,44 @@
 package com.aklimets.pet.infrasctucture.cryptography;
 
+import com.aklimets.pet.crypto.provider.VersionedKeyPairProvider;
 import com.aklimets.pet.crypto.util.AsymmetricKeyUtil;
-import com.aklimets.pet.infrasctucture.security.keyprovider.JwtKeyPairProvider;
+import com.aklimets.pet.crypto.util.SymmetricKeyUtil;
+import com.aklimets.pet.infrasctucture.cryptography.keyprovider.JwtKeyPairProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class KeyPairConfiguration {
 
-    @Value("${jwt.access.public.key.path}")
-    private String accessPublicKeyPath;
+    @Value("${simple.secrets.manager.access-key-name}")
+    private String accessKeyName;
 
-    @Value("${jwt.refresh.public.key.path}")
-    private String refreshPublicKeyPath;
+    @Value("${simple.secrets.manager.refresh-key-name}")
+    private String refreshKeyName;
 
-    @Value("${jwt.access.private.key.path}")
-    private String accessPrivateKeyPath;
-
-    @Value("${jwt.refresh.private.key.path}")
-    private String refreshPrivateKeyPath;
+    @Value("${simple.secrets.manager.url}")
+    private String secretsManagerUrl;
 
     @Autowired
     private AsymmetricKeyUtil asymmetricKeyUtil;
 
+    @Autowired
+    private SymmetricKeyUtil symmetricKeyUtil;
+
+    @Autowired
+    private RestTemplate secretsManagerRestTemplate;
+
     @Bean
-    public JwtKeyPairProvider jwtAccessKeyPairProvider() {
-        return new JwtKeyPairProvider(accessPublicKeyPath, accessPrivateKeyPath, asymmetricKeyUtil);
+    public VersionedKeyPairProvider jwtAccessKeyPairProvider() {
+        return new JwtKeyPairProvider(accessKeyName, secretsManagerUrl, secretsManagerRestTemplate, asymmetricKeyUtil, symmetricKeyUtil);
     }
 
     @Bean
-    public JwtKeyPairProvider jwtRefreshKeyPairProvider() {
-        return new JwtKeyPairProvider(refreshPublicKeyPath, refreshPrivateKeyPath, asymmetricKeyUtil);
+    public VersionedKeyPairProvider jwtRefreshKeyPairProvider() {
+        return new JwtKeyPairProvider(refreshKeyName, secretsManagerUrl, secretsManagerRestTemplate, asymmetricKeyUtil, symmetricKeyUtil);
     }
 
 }
