@@ -83,16 +83,30 @@ public class JwtKeyPairProvider implements VersionedKeyPairProvider {
 
     @SneakyThrows
     private void populateKeys() {
-        StoredKeyResponse storedKey = getStoredKey();
-        var currentVersion = getCurrentVersion(storedKey);
+        var storedKey = getStoredKey();
+        storedKey.versions().forEach(this::getKeyForVersion);
+    }
+
+    @SneakyThrows
+    private void getKeyForVersion(StoredKeyVersionResponse version) {
+        var currentVersion = version.id();
         var publicKeyResponse = getPublicKeyResponse(currentVersion);
-        savePublicKey(publicKeyResponse, currentVersion);
+        var localPublicKey = asymmetricKeyUtil.getPublicKeyInstance(publicKeyResponse.getPublicKey(), AsymmetricAlgorithm.valueOf(publicKeyResponse.getAlgorithm()));
+
 
         var sessionKey = symmetricKeyUtil.generateSessionKey();
         var encryptedSessionKey = asymmetricKeyUtil.encrypt(sessionKey, publicKeyResponse.getDisposableKey().publicKey());
 
         var privateKeyResponse = getPrivateKeyResponse(currentVersion, publicKeyResponse.getDisposableKey().keyId(), encryptedSessionKey);
-        savePrivateKey(privateKeyResponse, currentVersion, sessionKey);
+        var decryptedPrivateKey = symmetricKeyUtil.decrypt(privateKeyResponse.privateKey(), sessionKey);
+        var localPrivateKey = asymmetricKeyUtil.getPrivateKeyInstance(decryptedPrivateKey, AsymmetricAlgorithm.valueOf(privateKeyResponse.algorithm()));
+
+        publicKeyVersions.put(currentVersion, localPublicKey);
+        privateKeyVersions.put(currentVersion, localPrivateKey);
+        if (version.state().equals("CURRENT")) {
+            publicKey = localPublicKey;
+            privateKey = localPrivateKey;
+        }
     }
 
     private StoredKeyResponse getStoredKey() {
