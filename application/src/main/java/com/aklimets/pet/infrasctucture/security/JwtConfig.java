@@ -2,7 +2,6 @@ package com.aklimets.pet.infrasctucture.security;
 
 import com.aklimets.pet.crypto.provider.VersionedKeyPairProvider;
 import com.aklimets.pet.infrasctucture.security.annotation.WithJwtAuth;
-import com.aklimets.pet.infrasctucture.cryptography.keyprovider.JwtKeyPairProvider;
 import com.aklimets.pet.jwt.util.JwtExtractor;
 import com.aklimets.pet.jwt.util.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
